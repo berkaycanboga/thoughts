@@ -1,0 +1,33 @@
+import { useFormik } from "formik";
+import { signUpApi } from "../../../utils/api/signUpApi";
+import {
+  validateSignUp,
+  SignUpValidationResult,
+} from "../../../utils/validation/signUpValidation";
+
+const useSignUpFormLogic = () => {
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      fullName: "",
+      identifier: "",
+      password: "",
+    },
+    onSubmit: async (values) => {
+      try {
+        await signUpApi(values);
+        console.log("Form submitted successfully:", values);
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
+    },
+    validate: async (values) => {
+      const validation: SignUpValidationResult = await validateSignUp(values);
+      return validation.errors;
+    },
+  });
+
+  return { formik };
+};
+
+export default useSignUpFormLogic;
