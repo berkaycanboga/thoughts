@@ -7,11 +7,10 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
-    <html lang="en">
-      <body>
-        <div>{children}</div>
-      </body>
-    </html>
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar />
+      <div className="flex-1 overflow-y-auto bg-gray-100">{children}</div>
+    </div>
   );
 };
 

@@ -1,16 +1,24 @@
-import React, { ReactNode } from "react";
+import React from "react";
+import Image from "next/image";
 
 interface AuthLayoutProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
-    <html lang="en">
-      <body>
-        <div>{children}</div>
-      </body>
-    </html>
+    <div className="min-h-screen flex flex-col items-start p-8 bg-gray-100">
+      <div className="mb-8">
+        <Image
+          src="/logo.svg"
+          alt="Logo"
+          width={150}
+          height={50}
+          priority={true}
+        />
+      </div>
+      <div className="w-full md:w-96 mx-auto my-auto">{children}</div>
+    </div>
   );
 };
 
