@@ -25,23 +25,21 @@ export const getPostById = async (postId: number) => {
 export const getUserPosts = async (userId: number) => {
   const userPosts = await prisma.post.findMany({
     where: { authorId: userId },
+    include: { author: true },
   });
 
   return userPosts;
 };
 
 export const getUserFollowingPosts = async (userId: number) => {
-  const userFollowingPosts = await prisma.post.findMany({
-    where: {
-      author: {
-        following: {
-          some: { id: userId },
-        },
-      },
+  const userFollowing = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      following: { include: { posts: { include: { author: true } } } },
     },
   });
 
-  return userFollowingPosts;
+  return userFollowing?.following?.map((user) => user.posts).flat() || [];
 };
 
 export const updatePost = async (
