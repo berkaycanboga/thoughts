@@ -4,7 +4,7 @@ export interface User {
   fullName: string;
   email?: string | null;
   phone?: string | null;
-  password: string;
+  password?: string;
 }
 
 export interface SignUpUser {
