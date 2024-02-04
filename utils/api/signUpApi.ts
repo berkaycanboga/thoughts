@@ -3,7 +3,7 @@ import { signInApi } from "./signInApi";
 
 export const signUpApi = async (data: SignUpUser) => {
   try {
-    const signUpResponse = await fetch("/api/auth/signup", {
+    const response = await fetch("/api/auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -11,11 +11,11 @@ export const signUpApi = async (data: SignUpUser) => {
       body: JSON.stringify(data),
     });
 
-    if (signUpResponse.ok) {
+    if (response.ok) {
       await signInApi(data);
       return { success: true };
     } else {
-      const errorData = await signUpResponse.json();
+      const errorData = await response.json();
       return { error: errorData.message || "Error signing up" };
     }
   } catch (error) {
