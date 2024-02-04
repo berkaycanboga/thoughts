@@ -1,5 +1,4 @@
 import { SignUpUser, LoginUser } from "../models/User";
-import { comparePassword, hashPassword } from "../utils/bcrypt";
 import prisma from "../utils/prisma";
 import {
   SignInValidationResult,
@@ -39,12 +38,10 @@ export const createUser = async (userData: SignUpUser) => {
     throw new Error("Email or phone already in use");
   }
 
-  const hashedPassword = hashPassword(password);
-
   const user = await prisma.user.create({
     data: {
       ...rest,
-      password: hashedPassword,
+      password: password,
       email: identifierType === "email" ? identifier : undefined,
       phone: identifierType === "phone" ? identifier : undefined,
     },
@@ -80,12 +77,6 @@ export const findUser = async (credentials: LoginUser) => {
 
   if (!user) {
     throw new Error("User not found");
-  }
-
-  const isPasswordValid = comparePassword(password, user.password);
-
-  if (!isPasswordValid) {
-    throw new Error("Invalid password");
   }
 
   return user;
