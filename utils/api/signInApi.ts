@@ -4,7 +4,7 @@ import { LoginUser } from "../../models/User";
 export const signInApi = async (data: LoginUser) => {
   try {
     const result = await signIn("credentials", {
-      redirect: false,
+      callbackUrl: "/dashboard",
       ...data,
     });
 
@@ -19,6 +19,7 @@ export const signInApi = async (data: LoginUser) => {
     return { success: true };
   } catch (error) {
     console.error("Error during sign-in:", error);
+
     return { error: "An unexpected error occurred" };
   }
 };
