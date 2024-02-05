@@ -33,6 +33,15 @@ export const authOptions: NextAuthOptions = {
           throw new Error("User not found");
         }
 
+        const isPasswordValid = await argon2.verify(
+          user.password,
+          credentials.password,
+        );
+
+        if (!isPasswordValid) {
+          throw new Error("Invalid password");
+        }
+
         return {
           id: user.id,
           username: user.username,

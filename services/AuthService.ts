@@ -1,9 +1,7 @@
-import { SignUpUser, LoginUser } from "../models/User";
 import prisma from "../utils/prisma";
-import {
-  SignInValidationResult,
-  validateSignIn,
-} from "../utils/validation/signInValidation";
+import argon2 from "argon2";
+import { SignUpUser } from "../models/User";
+
 import {
   SignUpValidationResult,
   validateSignUp,
@@ -38,10 +36,12 @@ export const createUser = async (userData: SignUpUser) => {
     throw new Error("Email or phone already in use");
   }
 
+  const hashedPassword = await argon2.hash(password);
+
   const user = await prisma.user.create({
     data: {
       ...rest,
-      password: password,
+      password: hashedPassword,
       email: identifierType === "email" ? identifier : undefined,
       phone: identifierType === "phone" ? identifier : undefined,
     },
