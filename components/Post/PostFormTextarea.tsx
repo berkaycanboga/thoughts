@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
 import { useFormik } from "formik";
+import React, { useEffect, useRef } from "react";
+
 import { calculatePostDetails } from "../../utils/postFormUtils";
 import {
   PostValidation,
@@ -23,7 +24,12 @@ const PostFormTextarea = ({
 }: PostFormTextareaProps) => {
   const formik = useFormik({
     initialValues,
-    onSubmit,
+    onSubmit: (values: PostValidation) => {
+      onSubmit(values);
+      if (!isUpdatePost) {
+        formik.resetForm();
+      }
+    },
     validate: (values: PostValidation) => {
       try {
         PostSchema.parse(values);
@@ -50,6 +56,8 @@ const PostFormTextarea = ({
     postStyle,
   } = calculatePostDetails(formik.values, isLoading);
 
+  const textareaRef = useRef(null);
+
   const notifyContentChange = (newContent: string) => {
     if (onContentChange) {
       onContentChange(newContent);
@@ -62,12 +70,13 @@ const PostFormTextarea = ({
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [formik.errors]);
+  }, [formik, formik.errors]);
 
   return (
     <form onSubmit={formik.handleSubmit} className="mt-6 space-y-4 relative">
       <div className="relative">
         <textarea
+          ref={textareaRef}
           maxLength={379}
           value={formik.values.postContent}
           onChange={(e) => {
