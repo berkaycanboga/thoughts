@@ -1,13 +1,15 @@
+import { Session } from "next-auth";
+import { getSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { BsInfoCircle, BsPencil } from "react-icons/bs";
+
 import { postsApiService } from "../../utils/api/post";
-import PreviewPost from "./PreviewPost";
-import Popup from "../Common/Popup";
-import PostFormTextarea from "./PostFormTextarea";
 import { PostValidation } from "../../utils/validation/postValidation";
 import useErrorHandling from "../Common/ErrorDisplay";
-import { getSession } from "next-auth/react";
-import { Session } from "next-auth";
+import Popup from "../Common/Popup";
+
+import PostFormTextarea from "./PostFormTextarea";
+import PreviewPost from "./PreviewPost";
 
 interface UpdatePostProps {
   userId: number;
@@ -27,6 +29,7 @@ const UpdatePost = ({
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
   const [draftContent, setDraftContent] = useState(content);
   const [session, setSession] = useState<Session | null>(null);
+  const [formKey, setFormKey] = useState(0);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -66,6 +69,8 @@ const UpdatePost = ({
   const handlePopupClose = () => {
     setIsEditing(false);
     resetError();
+    setFormKey((prevKey) => prevKey + 1);
+    setDraftContent(content);
   };
 
   return (
@@ -87,6 +92,7 @@ const UpdatePost = ({
             <div className="relative">
               {error && <p className="text-red-500 text-sm">{error.message}</p>}
               <PostFormTextarea
+                key={formKey}
                 isUpdatePost
                 initialValues={{ postContent: content }}
                 onSubmit={handlePostUpdate}
