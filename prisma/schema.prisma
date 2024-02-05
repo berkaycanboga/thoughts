@@ -18,12 +18,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  posts         Post[]
-  followers     User[]         @relation("Followers")
-  following     User[]         @relation("Followers")
-  notifications Notification[]
-  Like          Like[]
-  Comment       Comment[]
+  post      Post[]
+  followers User[]    @relation("Followers")
+  following User[]    @relation("Followers")
+  like      Like[]
+  comment   Comment[]
 }
 
 model Post {
@@ -32,26 +31,12 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  author   User      @relation(fields: [authorId], references: [id])
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId Int
-  likes    Like[]
-  comments Comment[]
-  tags     Tag[]
+  like     Like[]
+  comment  Comment[]
 
   @@index([authorId])
-}
-
-model Like {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
-  post   Post @relation(fields: [postId], references: [id])
-  postId Int
-
-  @@index([userId])
-  @@index([postId])
 }
 
 model Comment {
@@ -59,30 +44,28 @@ model Comment {
   content   String
   createdAt DateTime @default(now())
 
-  user   User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
-  post   Post @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
+  like   Like[]
 
   @@index([userId])
   @@index([postId])
 }
 
-model Tag {
+model Like {
   id        Int      @id @default(autoincrement())
-  name      String
   createdAt DateTime @default(now())
 
-  posts Post[]
-}
-
-model Notification {
-  id        Int      @id @default(autoincrement())
-  content   String
-  createdAt DateTime @default(now())
-
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  Comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId Int?
 
   @@index([userId])
+  @@index([postId])
+  @@index([commentId])
 }
