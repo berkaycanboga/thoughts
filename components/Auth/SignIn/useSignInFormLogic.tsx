@@ -37,7 +37,7 @@ const useSignInFormLogic = () => {
         setError("An unexpected error occurred");
       }
     },
-    validate: async (values) => {
+    validate: (values) => {
       const validation: SignInValidationResult = validateSignIn(values);
       return validation.errors;
     },

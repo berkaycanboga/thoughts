@@ -21,8 +21,8 @@ const useSignUpFormLogic = () => {
         console.error("Error submitting form:", error);
       }
     },
-    validate: async (values) => {
-      const validation: SignUpValidationResult = await validateSignUp(values);
+    validate: (values) => {
+      const validation: SignUpValidationResult = validateSignUp(values);
       return validation.errors;
     },
   });
