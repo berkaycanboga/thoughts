@@ -4,8 +4,8 @@ import { LoginUser } from "../../models/User";
 export const signInApi = async (data: LoginUser) => {
   try {
     const result = await signIn("credentials", {
-      callbackUrl: "/dashboard",
       ...data,
+      redirect: false,
     });
 
     if (result?.error) {
@@ -16,7 +16,7 @@ export const signInApi = async (data: LoginUser) => {
       return { error: "Invalid username, email, or password" };
     }
 
-    return { success: true };
+    return { success: true && (window.location.href = "/dashboard") };
   } catch (error) {
     console.error("Error during sign-in:", error);
 

@@ -78,9 +78,5 @@ export const authOptions: NextAuthOptions = {
         },
       };
     },
-    async redirect({ url }) {
-      const cleanUrl = url.split("?")[0];
-      return cleanUrl;
-    },
   },
 };
