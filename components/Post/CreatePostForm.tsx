@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createPostApi } from "../../utils/api/postApi";
+import { postsApiService } from "../../utils/api/postApi";
 import { Post } from "../../models/Post";
 import { PostValidation } from "../../utils/validation/postValidation";
 import PostFormTextarea from "./PostFormTextarea";
@@ -26,7 +26,10 @@ const CreatePostForm = ({ userId, onSuccess }: CreatePostFormProps) => {
       setIsLoading(true);
       resetError();
 
-      const createdPost = await createPostApi(userId, values.postContent);
+      const createdPost = await postsApiService.createPost(
+        userId,
+        values.postContent,
+      );
 
       handleSuccess(createdPost);
     } catch (err) {

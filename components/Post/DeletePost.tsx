@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BsTrash } from "react-icons/bs";
-import { deletePostApi } from "../../utils/api/postApi";
+import { postsApiService } from "../../utils/api/postApi";
 import Popup from "../Common/Popup";
 import useErrorHandling from "../Common/ErrorDisplay";
 
@@ -20,7 +20,7 @@ const DeletePost = ({ userId, postId, onPostDelete }: DeletePostProps) => {
     try {
       setIsDeleteLoading(true);
 
-      await deletePostApi(userId, postId);
+      await postsApiService.deletePost(userId, postId);
 
       setIsDeleteConfirmOpen(false);
       setIsDeleteLoading(false);

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import CreatePostForm from "../Post/CreatePostForm";
 import PostItem from "../Post/PostItem";
 import { Post } from "../../models/Post";
-import { fetchNewPosts } from "../../utils/api/postApi";
+import { processNewPosts } from "../../utils/api/postApi";
 import LoadingPlaceholder from "../Post/PlaceholderPost";
 
 interface DashboardProps {
@@ -38,7 +38,7 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
     setTimeout(async () => {
       setManualPostCreationInProgress(false);
 
-      await fetchNewPosts(
+      await processNewPosts(
         userId,
         () => mainFeed,
         setNewPosts,
@@ -62,7 +62,7 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
       prevMainFeed.filter((post) => post.id !== postId),
     );
 
-    await fetchNewPosts(
+    await processNewPosts(
       userId,
       () => mainFeed,
       setNewPosts,
@@ -80,7 +80,7 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (!isManualPostCreationInProgress) {
-        fetchNewPosts(
+        processNewPosts(
           userId,
           () => mainFeed,
           setNewPosts,

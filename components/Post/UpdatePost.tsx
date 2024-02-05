@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BsInfoCircle, BsPencil } from "react-icons/bs";
-import { updatePostApi } from "../../utils/api/postApi";
+import { postsApiService } from "../../utils/api/postApi";
 import PreviewPost from "./PreviewPost";
 import Popup from "../Common/Popup";
 import PostFormTextarea from "./PostFormTextarea";
@@ -43,7 +43,7 @@ const UpdatePost = ({
       resetError();
 
       const updatedContent = values.postContent;
-      await updatePostApi(userId, postId, updatedContent);
+      await postsApiService.updatePost(userId, postId, updatedContent);
 
       setIsEditing(false);
       setIsUpdateLoading(false);
