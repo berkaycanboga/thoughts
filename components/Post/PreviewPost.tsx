@@ -1,5 +1,6 @@
 import React from "react";
 import { BsDot } from "react-icons/bs";
+
 import { calculateTimeAgo } from "../../utils/time";
 
 interface PreviewPostProps {

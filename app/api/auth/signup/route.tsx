@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { SignUpUser } from "../../../../models/User";
+
 import { signUp } from "../../../../controllers/AuthController";
+import { SignUpUser } from "../../../../models/User";
 
 export async function POST(req: Request) {
   const userData: SignUpUser = await req.json();

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { decodeToken } from "./utils/decode";
 
 export { default } from "next-auth/middleware";

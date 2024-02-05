@@ -1,4 +1,5 @@
 import { Post } from "../../models/Post";
+
 import { api, urls } from "./api";
 
 export const postsApiService = {

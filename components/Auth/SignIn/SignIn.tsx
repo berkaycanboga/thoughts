@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
-import SignInForm from "./SignInForm";
 import Image from "next/image";
+import React from "react";
+
+import SignInForm from "./SignInForm";
 
 const SignIn = () => {
   return (

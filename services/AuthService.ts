@@ -1,7 +1,7 @@
-import prisma from "../utils/prisma";
 import argon2 from "argon2";
-import { SignUpUser } from "../models/User";
 
+import { SignUpUser } from "../models/User";
+import prisma from "../utils/prisma";
 import {
   SignUpValidationResult,
   validateSignUp,

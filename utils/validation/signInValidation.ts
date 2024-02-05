@@ -1,5 +1,5 @@
-import { z, ZodError } from "zod";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { z, ZodError } from "zod";
 
 const SignInSchema = z.object({
   identifier: z.string().min(1, "Email or Phone is required"),

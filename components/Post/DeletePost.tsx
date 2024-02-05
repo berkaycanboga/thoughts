@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { BsTrash } from "react-icons/bs";
+
 import { postsApiService } from "../../utils/api/post";
-import Popup from "../Common/Popup";
 import useErrorHandling from "../Common/ErrorDisplay";
+import Popup from "../Common/Popup";
 
 interface DeletePostProps {
   userId: number;

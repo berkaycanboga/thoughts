@@ -1,4 +1,5 @@
 import { getServerSession } from "next-auth/next";
+
 import SignIn from "../../../components/Auth/SignIn/SignIn";
 
 const SignInPage = async () => {

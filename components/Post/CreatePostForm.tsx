@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { postsApiService } from "../../utils/api/post";
+
 import { Post } from "../../models/Post";
+import { postsApiService } from "../../utils/api/post";
 import { PostValidation } from "../../utils/validation/postValidation";
-import PostFormTextarea from "./PostFormTextarea";
 import useErrorHandling from "../Common/ErrorDisplay";
+
+import PostFormTextarea from "./PostFormTextarea";
 
 interface CreatePostFormProps {
   userId: number;

@@ -1,11 +1,12 @@
-import React from "react";
-import Dashboard from "../../../components/Dashboard/Dashboard";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../api/auth/[...nextauth]/options";
+import React from "react";
+
+import Dashboard from "../../../components/Dashboard/Dashboard";
 import {
   getUserPostsController,
   getUserFollowingPostsController,
 } from "../../../controllers/PostController";
+import { authOptions } from "../../api/auth/[...nextauth]/options";
 
 const DashboardPage = async () => {
   const session = await getServerSession(authOptions);

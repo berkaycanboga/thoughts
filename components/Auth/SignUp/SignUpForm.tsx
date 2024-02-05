@@ -1,6 +1,7 @@
 import React from "react";
-import useSignUpFormLogic from "./useSignUpFormLogic";
+
 import SignUpFormInput from "./FormInput";
+import useSignUpFormLogic from "./useSignUpFormLogic";
 
 const SignUpForm = () => {
   const { formik } = useSignUpFormLogic();

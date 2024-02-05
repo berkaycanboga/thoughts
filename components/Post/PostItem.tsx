@@ -1,9 +1,11 @@
 import React from "react";
-import { calculateTimeAgo } from "../../utils/time";
 import { BsThreeDots, BsDot } from "react-icons/bs";
-import UpdatePost from "./UpdatePost";
-import DeletePost from "./DeletePost";
+
+import { calculateTimeAgo } from "../../utils/time";
 import Dropdown from "../Common/Dropdown";
+
+import DeletePost from "./DeletePost";
+import UpdatePost from "./UpdatePost";
 
 interface PostItemProps {
   userId: number;

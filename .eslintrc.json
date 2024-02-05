@@ -12,6 +12,10 @@
       ],
       "rules": {
         "prettier/prettier": "error",
+        "import/order": [
+          "error",
+          { "newlines-between": "always", "alphabetize": { "order": "asc" } }
+        ],
         "@typescript-eslint/explicit-module-boundary-types": "off"
       }
     }

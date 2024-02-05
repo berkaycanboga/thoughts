@@ -1,5 +1,5 @@
-import { z, ZodError } from "zod";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { z, ZodError } from "zod";
 
 const SignUpSchema = z.object({
   identifier: z

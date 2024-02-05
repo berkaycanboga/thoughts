@@ -1,4 +1,5 @@
 import { signIn } from "next-auth/react";
+
 import { LoginUser } from "../../models/User";
 
 export const signInApi = async (data: LoginUser) => {

@@ -1,6 +1,7 @@
 import React from "react";
-import useSignInFormLogic from "./useSignInFormLogic";
+
 import SignInFormInput from "./FormInput";
+import useSignInFormLogic from "./useSignInFormLogic";
 
 const SignInForm = () => {
   const { formik, error } = useSignInFormLogic();

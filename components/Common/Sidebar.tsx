@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import React, { useState, useEffect } from "react";
 import {
   BsHouse,
   BsHouseFill,
@@ -11,8 +13,6 @@ import {
   BsPerson,
   BsPersonFill,
 } from "react-icons/bs";
-import Image from "next/image";
-import Link from "next/link";
 
 const Sidebar = () => {
   const pathname = usePathname();

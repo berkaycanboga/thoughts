@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import CreatePostForm from "../Post/CreatePostForm";
-import PostItem from "../Post/PostItem";
+
 import { Post } from "../../models/Post";
 import { processNewPosts } from "../../utils/api/mainFeed";
+import CreatePostForm from "../Post/CreatePostForm";
 import LoadingPlaceholder from "../Post/PlaceholderPost";
+import PostItem from "../Post/PostItem";
 
 interface DashboardProps {
   userId: number;

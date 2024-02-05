@@ -1,5 +1,7 @@
 import axios from "axios";
+
 import { SignUpUser } from "../../models/User";
+
 import { signInApi } from "./signIn";
 
 export const signUpApi = async (data: SignUpUser) => {
