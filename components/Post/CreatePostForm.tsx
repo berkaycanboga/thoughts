@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { postsApiService } from "../../utils/api/postApi";
+import { postsApiService } from "../../utils/api/post";
 import { Post } from "../../models/Post";
 import { PostValidation } from "../../utils/validation/postValidation";
 import PostFormTextarea from "./PostFormTextarea";

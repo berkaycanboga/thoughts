@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BsInfoCircle, BsPencil } from "react-icons/bs";
-import { postsApiService } from "../../utils/api/postApi";
+import { postsApiService } from "../../utils/api/post";
 import PreviewPost from "./PreviewPost";
 import Popup from "../Common/Popup";
 import PostFormTextarea from "./PostFormTextarea";

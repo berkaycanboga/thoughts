@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { signUpApi } from "../../../utils/api/signUpApi";
+import { signUpApi } from "../../../utils/api/signUp";
 import {
   validateSignUp,
   SignUpValidationResult,

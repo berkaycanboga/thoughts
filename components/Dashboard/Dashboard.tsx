@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import CreatePostForm from "../Post/CreatePostForm";
 import PostItem from "../Post/PostItem";
 import { Post } from "../../models/Post";
-import { processNewPosts } from "../../utils/api/postApi";
+import { processNewPosts } from "../../utils/api/mainFeed";
 import LoadingPlaceholder from "../Post/PlaceholderPost";
 
 interface DashboardProps {
