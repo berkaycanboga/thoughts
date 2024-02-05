@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
   }
 
   const currentUser = decodedToken!.id;
-  const targetUserId = parseInt(req.url?.split("/")[5]);
+  const targetUserId = parseInt(req.nextUrl.pathname.split("/")[3]);
 
   if (targetUserId && targetUserId !== currentUser)
     return NextResponse.json(
