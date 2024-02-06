@@ -1,3 +1,4 @@
+import argon2 from "argon2";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -36,7 +37,7 @@ export const authOptions: NextAuthOptions = {
 
         const isPasswordValid = await argon2.verify(
           user.password,
-          credentials.password,
+          credentials!.password,
         );
 
         if (!isPasswordValid) {
