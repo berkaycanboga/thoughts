@@ -12,8 +12,8 @@ export const createPostController = async (postData: Post) => {
   return createPost(postData);
 };
 
-export const getPostByIdController = async (postId: number) => {
-  return getPostById(postId);
+export const getPostByIdController = async (postId: number, userId: number) => {
+  return getPostById(postId, userId);
 };
 
 export const getUserPostsController = async (userId: number) => {
