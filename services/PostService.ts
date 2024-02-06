@@ -36,11 +36,11 @@ export const getUserFollowingPosts = async (userId: number) => {
   const userFollowing = await prisma.user.findUnique({
     where: { id: userId },
     include: {
-      following: { include: { posts: { include: { author: true } } } },
+      following: { include: { post: { include: { author: true } } } },
     },
   });
 
-  return userFollowing?.following?.map((user) => user.posts).flat() || [];
+  return userFollowing?.following?.map((user) => user.post).flat() || [];
 };
 
 export const updatePost = async (
