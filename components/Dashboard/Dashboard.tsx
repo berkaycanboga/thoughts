@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 
 import { Post } from "../../models/Post";
 import { processNewPosts } from "../../utils/api/mainFeed";
+import PostContainer from "../Common/PostContainer";
 import CreatePostForm from "../Post/CreatePostForm";
 import LoadingPlaceholder from "../Post/PlaceholderPost";
 import PostItem from "../Post/PostItem";
@@ -101,53 +102,49 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
   });
 
   return (
-    <div className="flex justify-center">
-      <div className="border border-gray-200 rounded-md p-4 w-full max-w-xl">
-        <div className="container mx-auto mt-8">
-          <div className="pb-4 border-b border-gray-200 mb-4">
-            <CreatePostForm userId={userId} onSuccess={handleCreatePost} />
-          </div>
-
-          {newPosts.length > 0 && !showNewPosts && (
-            <div className="mb-4">
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                onClick={handleShowNewPosts}
-              >
-                Show {newPosts.length} new post(s)
-              </button>
-            </div>
-          )}
-
-          {showPlaceholderPost && (
-            <div className="mb-4 p-3 bg-white rounded-md shadow-md h-auto min-h-32">
-              <LoadingPlaceholder />
-            </div>
-          )}
-
-          {[...sortedMainFeed].map((post, index) => (
-            <div key={post.id} className="relative">
-              {index > 0 && <div className="mt-4"></div>}
-              <div className="p-3 bg-white rounded-md shadow-md h-auto min-h-32">
-                <PostItem
-                  userId={post.author?.id as number}
-                  postId={post.id as number}
-                  content={post.content}
-                  username={post.author?.username as string}
-                  fullName={post.author?.fullName as string}
-                  createdAt={post.createdAt as Date}
-                  updatedAt={post.updatedAt as Date}
-                  onPostUpdate={(updatedContent) =>
-                    handleUpdatePost(post.id as number, updatedContent)
-                  }
-                  onPostDelete={() => handleDeletePost(post.id as number)}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+    <PostContainer>
+      <div className="pb-4 border-b border-gray-200 mb-4">
+        <CreatePostForm userId={userId} onSuccess={handleCreatePost} />
       </div>
-    </div>
+
+      {newPosts.length > 0 && !showNewPosts && (
+        <div className="mb-4">
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            onClick={handleShowNewPosts}
+          >
+            Show {newPosts.length} new post(s)
+          </button>
+        </div>
+      )}
+
+      {showPlaceholderPost && (
+        <div className="mb-4 p-3 bg-white rounded-md shadow-md h-auto min-h-32">
+          <LoadingPlaceholder />
+        </div>
+      )}
+
+      {[...sortedMainFeed].map((post, index) => (
+        <div key={post.id} className="relative">
+          {index > 0 && <div className="mt-4"></div>}
+          <div className="p-3 bg-white rounded-md shadow-md h-auto min-h-32">
+            <PostItem
+              userId={post.author?.id as number}
+              postId={post.id as number}
+              content={post.content}
+              username={post.author?.username as string}
+              fullName={post.author?.fullName as string}
+              createdAt={post.createdAt as Date}
+              updatedAt={post.updatedAt as Date}
+              onPostUpdate={(updatedContent) =>
+                handleUpdatePost(post.id as number, updatedContent)
+              }
+              onPostDelete={() => handleDeletePost(post.id as number)}
+            />
+          </div>
+        </div>
+      ))}
+    </PostContainer>
   );
 };
 
