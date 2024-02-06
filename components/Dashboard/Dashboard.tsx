@@ -63,14 +63,6 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
     setMainFeed((prevMainFeed) =>
       prevMainFeed.filter((post) => post.id !== postId),
     );
-
-    await processNewPosts(
-      userId,
-      () => mainFeed,
-      setNewPosts,
-      setShowNewPosts,
-      setMainFeed,
-    );
   };
 
   const handleShowNewPosts = () => {
