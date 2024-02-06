@@ -6,12 +6,16 @@ import {
   deletePostController,
 } from "../../../../../../controllers/PostController";
 
-export async function GET(req: Request, ctx: { params: { postId: string } }) {
+export async function GET(
+  req: Request,
+  ctx: { params: { postId: string; userId: string } },
+) {
   const postId = parseInt(ctx.params.postId, 10);
+  const userId = parseInt(ctx.params.userId, 10);
 
-  const post = await getPostByIdController(postId);
+  const post = await getPostByIdController(postId, userId);
 
-  return NextResponse.json({ post });
+  return NextResponse.json({ ...post });
 }
 
 export async function PUT(
