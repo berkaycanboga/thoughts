@@ -1,5 +1,4 @@
-"use client";
-
+import Link from "next/link";
 import { getSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { BsThreeDots, BsDot } from "react-icons/bs";
@@ -21,6 +20,7 @@ interface PostItemProps {
   updatedAt: Date;
   onPostUpdate: (editedContent: string) => void;
   onPostDelete: () => void;
+  alreadyLink?: boolean;
 }
 
 const PostItem = ({
@@ -33,6 +33,7 @@ const PostItem = ({
   updatedAt,
   onPostUpdate,
   onPostDelete,
+  alreadyLink = false,
 }: PostItemProps) => {
   const timeAgo = calculateTimeAgo(createdAt, updatedAt);
   const [postOwner, setPostOwner] = useState<number | null>(null);
@@ -59,8 +60,12 @@ const PostItem = ({
   const isOwner = postOwner === userId;
   const showDropdown = isOwner;
 
-  return (
-    <div className="relative">
+  const postContentClass = alreadyLink
+    ? "p-3 bg-white rounded-md shadow-md h-auto min-h-32 mt-4"
+    : "p-3 bg-white rounded-md shadow-md h-auto min-h-32 mt-4 cursor-pointer transition duration-300 hover:bg-gray-100";
+
+  const PostContent = (
+    <div className={postContentClass}>
       <div className="text-lg mb-1">
         <div className="flex items-center">
           <span className="font-bold text-base">{fullName}</span>
@@ -71,11 +76,25 @@ const PostItem = ({
         </div>
       </div>
 
-      <div className="absolute top-0 right-0 mt-2 mr-2">
-        {showDropdown && (
+      <p className="text-sm mb-1 mt-2 break-words">{content}</p>
+    </div>
+  );
+
+  return (
+    <div className="relative">
+      {alreadyLink ? (
+        PostContent
+      ) : (
+        <Link href={`/${username}/${postId}`}>{PostContent}</Link>
+      )}
+
+      {showDropdown && (
+        <div className="absolute top-0 right-0 mt-2 mr-2">
           <Dropdown
             trigger={
-              <BsThreeDots className="cursor-pointer text-gray-500 rounded-md text-xl" />
+              <div className="cursor-pointer flex items-center justify-center text-gray-500 rounded-md text-xl w-7 h-7 hover:bg-gray-100">
+                <BsThreeDots />
+              </div>
             }
           >
             <UpdatePost
@@ -90,10 +109,8 @@ const PostItem = ({
               onPostDelete={onPostDelete}
             />
           </Dropdown>
-        )}
-      </div>
-
-      <p className="text-sm mb-1 mt-2">{content}</p>
+        </div>
+      )}
     </div>
   );
 };
