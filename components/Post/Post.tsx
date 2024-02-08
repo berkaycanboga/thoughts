@@ -1,10 +1,19 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { getSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
 
+import { Comment } from "../../models/Comment";
 import { Post as PostModel } from "../../models/Post";
-import { handleUpdatePost, handleDeletePost } from "../../utils/postUtils";
+import {
+  handleCommentCreateUtil,
+  handleCommentDeleteUtil,
+} from "../../utils/post/comment";
+import { handleUpdatePost, handleDeletePost } from "../../utils/post/post";
+import CommentItem from "../Comment/CommentItem";
+import CreateCommentForm from "../Comment/CreateCommentForm";
+import CommentContainer from "../Common/CommentContainer";
 import PostContainer from "../Common/PostContainer";
 
 import PostItem from "./PostItem";
@@ -17,6 +26,21 @@ const Post = ({ post }: PostProps) => {
   const router = useRouter();
   const [content, setContent] = useState(post.content);
   const [postState, setPost] = useState<PostModel | null>(post);
+  const [userId, setUserId] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const session = await getSession();
+        const userId = session?.user.id;
+        setUserId(userId);
+      } catch (error) {
+        console.error("Error fetching post details:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const handleUpdate = async (updatedContent: string) => {
     handleUpdatePost(post.id as number, updatedContent, setPost);
@@ -30,10 +54,25 @@ const Post = ({ post }: PostProps) => {
     }
   };
 
+  const handleCommentCreate = async (newComment: Comment) => {
+    handleCommentCreateUtil(postState, newComment, setPost);
+  };
+
+  const handleCommentDelete = (commentId: number) => {
+    handleCommentDeleteUtil(postState, commentId, setPost);
+  };
+
+  const sortedComments = postState?.comment.sort((a, b) => {
+    return new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime();
+  });
+
+  console.log(sortedComments);
+
   return (
-    <PostContainer>
-      <div className="p-3 bg-white rounded-md shadow-md h-auto min-h-32">
+    <>
+      <PostContainer>
         <PostItem
+          alreadyLink={true}
           userId={postState?.author?.id as number}
           postId={postState?.id as number}
           content={content}
@@ -44,8 +83,30 @@ const Post = ({ post }: PostProps) => {
           onPostUpdate={handleUpdate}
           onPostDelete={handleDelete}
         />
-      </div>
-    </PostContainer>
+      </PostContainer>
+      <CommentContainer>
+        <CreateCommentForm
+          userId={userId!}
+          postId={post.id!}
+          onSuccess={handleCommentCreate}
+        ></CreateCommentForm>
+        {sortedComments?.map((comment) => (
+          <CommentItem
+            key={`comment-${comment.id}`}
+            userId={comment.userId}
+            postId={postState!.id!}
+            commentId={comment.id!}
+            content={comment.content}
+            fullName={comment.user?.fullName as string}
+            username={comment.user?.username as string}
+            createdAt={comment.createdAt as Date}
+            onCommentDelete={() => {
+              handleCommentDelete(comment.id!);
+            }}
+          />
+        ))}
+      </CommentContainer>
+    </>
   );
 };
 

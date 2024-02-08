@@ -62,4 +62,8 @@ export const urls = {
   user: (userId: number) => createUrl(`/user${userId ? `/${userId}` : ""}`),
   userPosts: (userId: number, postId?: number) =>
     createUrl(`/user/${userId}/posts${postId ? `/${postId}` : ""}`),
+  postComments: (userId: number, postId: number, commentId?: number) =>
+    createUrl(
+      `/user/${userId}/posts/${postId}/comments${commentId ? `/${commentId}` : ""}`,
+    ),
 };
