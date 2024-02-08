@@ -115,26 +115,22 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
           <LoadingPlaceholder />
         </div>
       )}
-
-      {[...sortedMainFeed].map((post, index) => (
-        <div key={post.id} className="relative">
-          {index > 0 && <div className="mt-4"></div>}
-          <div className="p-3 bg-white rounded-md shadow-md h-auto min-h-32">
-            <PostItem
-              userId={post.author?.id as number}
-              postId={post.id as number}
-              content={post.content}
-              username={post.author?.username as string}
-              fullName={post.author?.fullName as string}
-              createdAt={post.createdAt as Date}
-              updatedAt={post.updatedAt as Date}
-              onPostUpdate={(updatedContent) =>
-                handleUpdatePost(post.id as number, updatedContent)
-              }
-              onPostDelete={() => handleDeletePost(post.id as number)}
-            />
-          </div>
-        </div>
+      {[...sortedMainFeed].map((post) => (
+        <React.Fragment key={post.id}>
+          <PostItem
+            userId={post.author?.id as number}
+            postId={post.id as number}
+            content={post.content}
+            username={post.author?.username as string}
+            fullName={post.author?.fullName as string}
+            createdAt={post.createdAt as Date}
+            updatedAt={post.updatedAt as Date}
+            onPostUpdate={(updatedContent) =>
+              handleUpdatePost(post.id as number, updatedContent)
+            }
+            onPostDelete={() => handleDeletePost(post.id as number)}
+          />
+        </React.Fragment>
       ))}
     </PostContainer>
   );
