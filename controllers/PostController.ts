@@ -1,4 +1,4 @@
-import { Post } from "../models/Post";
+import { PostCRUD } from "../models/Post";
 import {
   createPost,
   getPostById,
@@ -8,12 +8,12 @@ import {
   deletePost,
 } from "../services/PostService";
 
-export const createPostController = async (postData: Post) => {
+export const createPostController = async (postData: PostCRUD) => {
   return createPost(postData);
 };
 
-export const getPostByIdController = async (postId: number, userId: number) => {
-  return getPostById(postId, userId);
+export const getPostByIdController = async (postId: number) => {
+  return getPostById(postId);
 };
 
 export const getUserPostsController = async (userId: number) => {
@@ -26,7 +26,7 @@ export const getUserFollowingPostsController = async (userId: number) => {
 
 export const updatePostController = async (
   postId: number,
-  updatedData: Partial<Post>,
+  updatedData: Partial<PostCRUD>,
 ) => {
   return updatePost(postId, updatedData);
 };

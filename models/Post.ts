@@ -6,7 +6,17 @@ export interface Post {
   content: string;
   author?: User;
   authorId: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  comment: Comment[];
+  isPlaceholder?: boolean;
+}
+
+export interface PostCRUD {
+  content: string;
+  author?: User;
+  authorId: number;
+  createdAt: Date;
+  updatedAt: Date;
   isPlaceholder?: boolean;
 }

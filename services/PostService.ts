@@ -1,7 +1,7 @@
-import { Post } from "../models/Post";
+import { PostCRUD } from "../models/Post";
 import prisma from "../utils/prisma";
 
-export const createPost = async (postData: Post) => {
+export const createPost = async (postData: PostCRUD) => {
   const { authorId, ...rest } = postData;
 
   const post = await prisma.post.create({
@@ -45,7 +45,7 @@ export const getUserFollowingPosts = async (userId: number) => {
 
 export const updatePost = async (
   postId: number,
-  updatedData: Partial<Post>,
+  updatedData: Partial<PostCRUD>,
 ) => {
   const { authorId, ...rest } = updatedData;
 
