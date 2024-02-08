@@ -1,8 +1,8 @@
 import { format, isToday, isYesterday } from "date-fns";
 import { enUS } from "date-fns/locale";
 
-export const calculateTimeAgo = (createdAt: Date, updatedAt: Date) => {
-  const dateToUse = updatedAt > createdAt ? updatedAt : createdAt;
+export const calculateTimeAgo = (createdAt: Date, updatedAt?: Date) => {
+  const dateToUse = updatedAt! > createdAt ? updatedAt : createdAt;
   const isUpdated =
     updatedAt !== undefined && updatedAt !== null && updatedAt > createdAt;
 
