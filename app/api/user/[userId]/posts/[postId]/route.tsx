@@ -11,9 +11,8 @@ export async function GET(
   ctx: { params: { postId: string; userId: string } },
 ) {
   const postId = parseInt(ctx.params.postId, 10);
-  const userId = parseInt(ctx.params.userId, 10);
 
-  const post = await getPostByIdController(postId, userId);
+  const post = await getPostByIdController(postId);
 
   return NextResponse.json({ ...post });
 }

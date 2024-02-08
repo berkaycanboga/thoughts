@@ -14,10 +14,10 @@ export const createPost = async (postData: PostCRUD) => {
   return post;
 };
 
-export const getPostById = async (postId: number, userId: number) => {
+export const getPostById = async (postId: number) => {
   const post = await prisma.post.findUnique({
-    where: { id: postId, authorId: userId },
-    include: { author: true },
+    where: { id: postId },
+    include: { author: true, comment: { include: { user: true } } },
   });
 
   return post;
@@ -26,7 +26,7 @@ export const getPostById = async (postId: number, userId: number) => {
 export const getUserPosts = async (userId: number) => {
   const userPosts = await prisma.post.findMany({
     where: { authorId: userId },
-    include: { author: true },
+    include: { author: true, comment: true },
   });
 
   return userPosts;
