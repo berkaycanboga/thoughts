@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { decodeToken } from "./utils/decode";
 
-export { default } from "next-auth/middleware";
-
 export async function middleware(req: NextRequest) {
   const decodedToken = await decodeToken(req);
 
@@ -12,17 +10,34 @@ export async function middleware(req: NextRequest) {
   }
 
   const currentUser = decodedToken!.id;
-  const targetUserId = parseInt(req.nextUrl.pathname.split("/")[3]);
+  const requestedUrl = new URL(req.url);
 
-  const isLikesEndpoint = req.nextUrl.pathname.includes("likes");
-  const isCommentsEndpoint = req.nextUrl.pathname.includes("comments");
+  const userId = requestedUrl.pathname.split("/")[3];
 
-  if ((req.method !== "GET", isLikesEndpoint, isCommentsEndpoint)) {
-    if (targetUserId && targetUserId !== currentUser)
+  const isGetMethod = req.method === "GET";
+
+  if (isGetMethod) {
+    return NextResponse.next();
+  }
+
+  const includesLikes = requestedUrl.pathname.includes("/likes");
+  const includesComments = requestedUrl.pathname.includes("/comments");
+
+  if (includesLikes || includesComments) {
+    if (parseInt(userId) !== currentUser) {
+      requestedUrl.pathname = requestedUrl.pathname.replace(
+        `/${userId}`,
+        `/${currentUser}`,
+      );
+    }
+  } else {
+    const targetUserId = parseInt(userId);
+    if (targetUserId !== currentUser) {
       return NextResponse.json(
         { error: "Forbidden: Operation on behalf of another user" },
         { status: 403 },
       );
+    }
   }
 
   return NextResponse.next();

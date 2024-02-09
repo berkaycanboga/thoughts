@@ -1,6 +1,15 @@
+import { getServerSession } from "next-auth";
+
+import { authOptions } from "../app/api/auth/[...nextauth]/options";
 import prisma from "../utils/prisma";
 
 export const createPostLike = async (userId: number, postId: number) => {
+  const userSession = await getServerSession(authOptions);
+
+  if (userSession!.user.id !== userId) {
+    throw new Error("Forbidden: Operation on behalf of another user");
+  }
+
   const like = await prisma.like.create({
     data: {
       user: { connect: { id: userId } },
@@ -30,14 +39,29 @@ export const getPostLikes = async (postId: number) => {
 };
 
 export const createCommentLike = async (userId: number, commentId: number) => {
-  const like = await prisma.like.create({
+  const userSession = await getServerSession(authOptions);
+
+  if (userSession!.user.id !== userId) {
+    throw new Error("Forbidden: Operation on behalf of another user");
+  }
+
+  const commentLike = await prisma.like.create({
     data: {
       user: { connect: { id: userId } },
       comment: { connect: { id: commentId } },
     },
   });
 
-  return like;
+  return commentLike;
+};
+
+export const getCommentLike = async (likeId: number, commentId: number) => {
+  const commentLikes = await prisma.like.findUnique({
+    where: { id: likeId, commentId: commentId },
+    include: { user: true, comment: true },
+  });
+
+  return commentLikes;
 };
 
 export const getCommentLikes = async (commentId: number) => {
@@ -50,6 +74,16 @@ export const getCommentLikes = async (commentId: number) => {
 };
 
 export const deleteLike = async (likeId: number) => {
+  const userSession = await getServerSession(authOptions);
+
+  const like = await prisma.like.findUnique({
+    where: { id: likeId },
+  });
+
+  if (userSession!.user.id !== like!.userId) {
+    throw new Error("Forbidden: Operation on behalf of another user");
+  }
+
   const deletedLike = await prisma.like.delete({
     where: { id: likeId },
   });
