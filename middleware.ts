@@ -13,7 +13,11 @@ export async function middleware(req: NextRequest) {
 
   const currentUser = decodedToken!.id;
   const targetUserId = parseInt(req.nextUrl.pathname.split("/")[3]);
-  if (req.method !== "GET") {
+
+  const isLikesEndpoint = req.nextUrl.pathname.includes("likes");
+  const isCommentsEndpoint = req.nextUrl.pathname.includes("comments");
+
+  if ((req.method !== "GET", isLikesEndpoint, isCommentsEndpoint)) {
     if (targetUserId && targetUserId !== currentUser)
       return NextResponse.json(
         { error: "Forbidden: Operation on behalf of another user" },
