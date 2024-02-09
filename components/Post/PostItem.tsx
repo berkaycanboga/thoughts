@@ -63,8 +63,8 @@ const PostItem = ({
   const showDropdown = isOwner;
 
   const postContentClass = alreadyLink
-    ? "p-3 bg-white rounded-md shadow-md h-auto min-h-32 mt-4"
-    : "p-3 bg-white rounded-md shadow-md h-auto min-h-32 mt-4 cursor-pointer transition duration-300 hover:bg-gray-100";
+    ? "p-3 bg-white rounded-md shadow-md h-auto min-h-40 mt-4"
+    : "p-3 bg-white rounded-md shadow-md h-auto min-h-40 mt-4 cursor-pointer transition duration-300 hover:bg-gray-100";
 
   const PostContent = (
     <div className={postContentClass}>
