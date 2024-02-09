@@ -1,3 +1,4 @@
+import { Like } from "./Like";
 import { User } from "./User";
 
 export interface Comment {
@@ -5,6 +6,7 @@ export interface Comment {
   content: string;
   createdAt?: Date;
   user?: User;
+  like: Like[];
   userId: number;
   postId: number;
 }

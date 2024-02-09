@@ -1,4 +1,5 @@
 import { Comment } from "./Comment";
+import { Like } from "./Like";
 import { User } from "./User";
 
 export interface Post {
@@ -9,6 +10,7 @@ export interface Post {
   createdAt: Date;
   updatedAt: Date;
   comment: Comment[];
+  like: Like[];
   isPlaceholder?: boolean;
 }
 
