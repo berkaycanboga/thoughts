@@ -66,4 +66,17 @@ export const urls = {
     createUrl(
       `/user/${userId}/posts/${postId}/comments${commentId ? `/${commentId}` : ""}`,
     ),
+  postLikes: (userId: number, postId: number, likeId?: number) =>
+    createUrl(
+      `/user/${userId}/posts/${postId}/likes/${likeId ? `/${likeId}` : ""}`,
+    ),
+  commentLikes: (
+    userId: number,
+    postId: number,
+    commentId: number,
+    likeId?: number,
+  ) =>
+    createUrl(
+      `/user/${userId}/posts/${postId}/comments/${commentId}/likes/${likeId ? `/${likeId}` : ""}`,
+    ),
 };
