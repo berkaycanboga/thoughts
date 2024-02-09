@@ -111,7 +111,7 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
       )}
 
       {showPlaceholderPost && (
-        <div className="mb-4 p-3 bg-white rounded-md shadow-md h-auto min-h-32">
+        <div className="mb-4 p-3 bg-white rounded-md shadow-md h-auto min-h-40">
           <LoadingPlaceholder />
         </div>
       )}
