@@ -61,10 +61,12 @@ model Like {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    Int
+  postId    Int?
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId Int?
 
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
   @@index([userId])
   @@index([postId])
   @@index([commentId])
