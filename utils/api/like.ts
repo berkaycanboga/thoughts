@@ -25,6 +25,15 @@ export const likesApiService = {
     return api.post(urls.commentLikes(userId, postId, commentId));
   },
 
+  getCommentLike: async (
+    userId: number,
+    postId: number,
+    commentId: number,
+    likeId: number,
+  ) => {
+    return api.get(urls.commentLikes(userId, postId, commentId, likeId));
+  },
+
   getCommentLikes: async (
     userId: number,
     postId: number,

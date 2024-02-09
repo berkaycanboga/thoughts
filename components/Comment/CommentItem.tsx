@@ -5,6 +5,7 @@ import { BsThreeDots, BsDot } from "react-icons/bs";
 import { commentsApiService } from "../../utils/api/comment";
 import { calculateTimeAgo } from "../../utils/time";
 import Dropdown from "../Common/Dropdown";
+import LikeCommentItem from "../Like/LikeCommentItem";
 
 import DeleteComment from "./DeleteComment";
 
@@ -55,8 +56,8 @@ const CommentItem = ({
   const showDropdown = isOwner;
 
   return (
-    <div className="p-3 bg-white rounded-md shadow-md h-auto min-h-32 mt-4">
-      <div className="relative">
+    <div className="relative">
+      <div className="p-3 bg-white rounded-md shadow-md h-auto min-h-32 mt-4">
         <div className="text-lg mb-1">
           <div className="flex items-center">
             <span className="font-bold text-base">{fullName}</span>
@@ -65,10 +66,11 @@ const CommentItem = ({
             <BsDot className="mx-1 text-gray-500" />
             <span className="text-xs text-gray-500">{timeAgo}</span>
           </div>
+          <p className="text-sm mb-1 mt-2">{content}</p>
         </div>
 
-        <div className="absolute top-0 right-0">
-          {showDropdown && (
+        {showDropdown && (
+          <div className="absolute top-0 right-0 mt-2 mr-2">
             <Dropdown
               trigger={
                 <div className="cursor-pointer flex items-center justify-center text-gray-500 rounded-md text-xl w-6 h-6 hover:bg-gray-100">
@@ -83,11 +85,16 @@ const CommentItem = ({
                 onCommentDelete={() => onCommentDelete(commentId)}
               />
             </Dropdown>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-
-      <p className="text-sm mb-1 mt-2">{content}</p>
+      <div className="absolute bottom-0 w-full p-1 flex justify-end">
+        <LikeCommentItem
+          userId={userId}
+          postId={postId}
+          commentId={commentId}
+        />
+      </div>
     </div>
   );
 };

@@ -32,6 +32,13 @@ export const createCommentLikeController = async (
   return createCommentLike(userId, commentId);
 };
 
+export const getCommentLikeController = async (
+  likedId: number,
+  commentId: number,
+) => {
+  return getPostLike(likedId, commentId);
+};
+
 export const getCommentLikesController = async (commentId: number) => {
   return getCommentLikes(commentId);
 };
