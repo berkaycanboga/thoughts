@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { getSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { BsThreeDots, BsDot } from "react-icons/bs";
+import { BsDot, BsThreeDots } from "react-icons/bs";
 
 import { postsApiService } from "../../utils/api/post";
 import { calculateTimeAgo } from "../../utils/time";
+import CreateCommentFormPopup from "../Comment/CreateCommentFormPopup";
 import Dropdown from "../Common/Dropdown";
+import LikePostItem from "../Like/LikePostItem";
 
 import DeletePost from "./DeletePost";
 import UpdatePost from "./UpdatePost";
@@ -87,7 +89,6 @@ const PostItem = ({
       ) : (
         <Link href={`/${username}/${postId}`}>{PostContent}</Link>
       )}
-
       {showDropdown && (
         <div className="absolute top-0 right-0 mt-2 mr-2">
           <Dropdown
@@ -111,6 +112,10 @@ const PostItem = ({
           </Dropdown>
         </div>
       )}
+      <div className="absolute bottom-0 w-full p-1 flex justify-end">
+        <LikePostItem userId={userId} postId={postId} />
+        <CreateCommentFormPopup userId={userId} postId={postId} />
+      </div>
     </div>
   );
 };
