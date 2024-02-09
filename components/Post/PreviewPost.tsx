@@ -22,7 +22,7 @@ const PreviewPost = ({
 
   return (
     <div className="relative mt-2">
-      <div className="p-3 bg-white rounded-md shadow-md min-h-32">
+      <div className="p-3 bg-white rounded-md shadow-md min-h-40">
         <div className="text-lg mb-1">
           <div className="flex items-center">
             <span className="font-bold text-base">{fullName}</span>
