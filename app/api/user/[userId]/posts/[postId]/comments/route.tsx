@@ -28,5 +28,5 @@ export async function GET(req: Request, ctx: { params: { postId: string } }) {
 
   const comments = await getCommentsByPostIdController(postId);
 
-  return NextResponse.json({ comments });
+  return NextResponse.json({ ...comments });
 }
