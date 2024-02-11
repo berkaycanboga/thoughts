@@ -115,7 +115,16 @@ const PostFormTextarea = ({
         }`}
         disabled={isButtonDisabled}
       >
-        {isLoading ? "Saving..." : isUpdatePost ? "Update Post" : "Create Post"}
+        {isLoading ? (
+          <div className="flex items-center justify-center space-x-2">
+            <div className="w-4 h-4 border-t-2 border-r-2 border-white rounded-full animate-spin"></div>
+            <span>Saving...</span>
+          </div>
+        ) : isUpdatePost ? (
+          "Update Post"
+        ) : (
+          "Create Post"
+        )}
       </button>
     </form>
   );
