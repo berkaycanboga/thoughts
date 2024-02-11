@@ -1,3 +1,4 @@
+import { getSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 
@@ -23,6 +24,9 @@ const LikeCommentItem = ({
   useEffect(() => {
     const fetchLikeId = async () => {
       try {
+        const session = await getSession();
+        const sessionUserId = session?.user?.id;
+
         const response = (await likesApiService.getCommentLikes(
           userId,
           postId,
@@ -30,7 +34,7 @@ const LikeCommentItem = ({
         )) as Like;
         const commentLikes: Like[] = Object.values(response);
         const userLike = commentLikes.find(
-          (like: Like) => like.user.id === userId,
+          (like: Like) => like.user.id === sessionUserId,
         );
         if (userLike) {
           setLiked(true);
@@ -47,10 +51,17 @@ const LikeCommentItem = ({
   const handleLike = async () => {
     if (!updatingLike) {
       setUpdatingLike(true);
+      setLiked(true);
+      setLikeCount((prevCount) => prevCount + 1);
+
       try {
-        setLiked(true);
-        setLikeCount((prevCount) => prevCount + 1);
-        await likesApiService.createCommentLike(userId, postId, commentId);
+        const newLike = (await likesApiService.createCommentLike(
+          userId,
+          postId,
+          commentId,
+        )) as Like;
+
+        setLikeId(newLike.id);
       } catch (error) {
         console.error("Error liking comment:", error);
         setLiked(false);
@@ -67,19 +78,13 @@ const LikeCommentItem = ({
       try {
         setLiked(false);
         setLikeCount((prevCount) => prevCount - 1);
-        const response = (await likesApiService.getCommentLikes(
-          userId,
-          postId,
-          commentId,
-        )) as Like;
-        const commentLikes = Object.values(response);
-        const userLike = commentLikes.find((like: Like) => like.user.id);
-        if (userLike) {
+
+        if (likeId) {
           await likesApiService.deleteCommentLike(
             userId,
             postId,
             commentId,
-            userLike.id,
+            likeId,
           );
           setLikeId(null);
         }

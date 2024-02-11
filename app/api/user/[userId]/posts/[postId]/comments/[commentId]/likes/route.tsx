@@ -18,7 +18,7 @@ export async function POST(
 
   const like = await createCommentLikeController(userId, commentId);
 
-  return NextResponse.json({ like });
+  return NextResponse.json({ ...like });
 }
 
 export async function GET(
