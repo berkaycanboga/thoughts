@@ -35,7 +35,7 @@ const CommentFormTextarea = ({
               ?.message ||
             error.message ||
             "Validation error";
-          return { content: errorMessage };
+          return { postContent: errorMessage };
         }
         return {};
       }
