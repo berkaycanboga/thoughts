@@ -79,4 +79,6 @@ export const urls = {
     createUrl(
       `/user/${userId}/posts/${postId}/comments/${commentId}/likes/${likeId ? `/${likeId}` : ""}`,
     ),
+  search: (searchTerm: string) =>
+    createUrl(`/user/search${searchTerm ? `/${searchTerm}` : ""}`),
 };
