@@ -1,3 +1,4 @@
+import { getSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 
@@ -18,13 +19,16 @@ const LikePostItem = ({ userId, postId }: LikePostItemProps) => {
   useEffect(() => {
     const fetchLikeId = async () => {
       try {
+        const session = await getSession();
+        const sessionUserId = session?.user?.id;
+
         const response = (await likesApiService.getPostLikes(
           userId,
           postId,
         )) as Like;
         const postLikes: Like[] = Object.values(response);
         const userLike = postLikes.find(
-          (like: Like) => like.user.id === userId,
+          (like: Like) => like.user.id === sessionUserId,
         );
         if (userLike) {
           setLiked(true);
@@ -41,10 +45,16 @@ const LikePostItem = ({ userId, postId }: LikePostItemProps) => {
   const handleLike = async () => {
     if (!updatingLike) {
       setUpdatingLike(true);
+      setLiked(true);
+      setLikeCount((prevCount) => prevCount + 1);
+
       try {
-        setLiked(true);
-        setLikeCount((prevCount) => prevCount + 1);
-        await likesApiService.createPostLike(userId, postId);
+        const newLike = (await likesApiService.createPostLike(
+          userId,
+          postId,
+        )) as Like;
+
+        setLikeId(newLike.id);
       } catch (error) {
         console.error("Error liking post:", error);
         setLiked(false);
@@ -61,14 +71,9 @@ const LikePostItem = ({ userId, postId }: LikePostItemProps) => {
       try {
         setLiked(false);
         setLikeCount((prevCount) => prevCount - 1);
-        const response = (await likesApiService.getPostLikes(
-          userId,
-          postId,
-        )) as Like;
-        const postLikes = Object.values(response);
-        const userLike = postLikes.find((like: Like) => like.user.id);
-        if (userLike) {
-          await likesApiService.deletePostLike(userId, postId, userLike.id);
+
+        if (likeId) {
+          await likesApiService.deletePostLike(userId, postId, likeId);
           setLikeId(null);
         }
       } catch (error) {

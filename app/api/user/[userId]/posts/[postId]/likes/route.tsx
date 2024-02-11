@@ -15,7 +15,7 @@ export async function POST(req: Request, ctx: { params: { postId: string } }) {
 
   const like = await createPostLikeController(userId, postId);
 
-  return NextResponse.json({ like });
+  return NextResponse.json({ ...like });
 }
 
 export async function GET(req: Request, ctx: { params: { postId: string } }) {
