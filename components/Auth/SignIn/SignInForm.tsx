@@ -1,6 +1,6 @@
 import React from "react";
 
-import FormInput from "../Shared/FormInput";
+import SharedFormInput from "../Shared/SharedFormInput";
 
 import useSignInFormLogic from "./useSignInFormLogic";
 
@@ -9,7 +9,7 @@ const SignInForm = () => {
 
   return (
     <form onSubmit={formik.handleSubmit} className="mt-8">
-      <FormInput
+      <SharedFormInput
         label="Username, Email, or Phone"
         id="identifier"
         type="text"
@@ -21,7 +21,7 @@ const SignInForm = () => {
         error={formik.errors.identifier}
       />
 
-      <FormInput
+      <SharedFormInput
         label="Password"
         id="password"
         type="password"
