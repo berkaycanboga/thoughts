@@ -8,3 +8,9 @@ export interface Like {
   post?: Post;
   comment?: Comment;
 }
+
+export interface LikeItemProps {
+  userId: number;
+  postId: number;
+  commentId?: number;
+}
