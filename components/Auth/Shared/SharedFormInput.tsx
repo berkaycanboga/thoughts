@@ -1,7 +1,7 @@
 import React from "react";
 import { BsCheckCircle, BsXCircle } from "react-icons/bs";
 
-interface SignUpFormInputProps {
+interface SharedFormInputProps {
   label: string;
   id: string;
   type: string;
@@ -13,7 +13,7 @@ interface SignUpFormInputProps {
   error: string | undefined;
 }
 
-const SignUpFormInput = ({
+const SharedFormInput = ({
   label,
   id,
   type,
@@ -23,7 +23,7 @@ const SignUpFormInput = ({
   onBlur,
   touched,
   error,
-}: SignUpFormInputProps) => (
+}: SharedFormInputProps) => (
   <div className="mb-4 relative">
     <label
       htmlFor={id}
@@ -58,4 +58,4 @@ const SignUpFormInput = ({
   </div>
 );
 
-export default SignUpFormInput;
+export default SharedFormInput;

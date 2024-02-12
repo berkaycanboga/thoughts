@@ -1,6 +1,7 @@
 import React from "react";
 
-import SignUpFormInput from "./FormInput";
+import FormInput from "../Shared/FormInput";
+
 import useSignUpFormLogic from "./useSignUpFormLogic";
 
 const SignUpForm = () => {
@@ -8,7 +9,7 @@ const SignUpForm = () => {
 
   return (
     <form onSubmit={formik.handleSubmit} className="mt-8">
-      <SignUpFormInput
+      <FormInput
         label="Username"
         id="username"
         name="username"
@@ -20,7 +21,7 @@ const SignUpForm = () => {
         error={formik.errors.username}
       />
 
-      <SignUpFormInput
+      <FormInput
         label="Full Name"
         id="fullName"
         name="fullName"
@@ -32,7 +33,7 @@ const SignUpForm = () => {
         error={formik.errors.fullName}
       />
 
-      <SignUpFormInput
+      <FormInput
         label="Email or Phone"
         id="identifier"
         name="identifier"
@@ -44,7 +45,7 @@ const SignUpForm = () => {
         error={formik.errors.identifier}
       />
 
-      <SignUpFormInput
+      <FormInput
         label="Password"
         id="password"
         name="password"
