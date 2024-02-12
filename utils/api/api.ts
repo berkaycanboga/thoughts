@@ -9,7 +9,7 @@ interface CustomError {
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
-  timeout: 5000,
+  timeout: 8000,
   timeoutErrorMessage: "Request timed out. Please try again later.",
   headers: {
     "Content-Type": "application/json",
