@@ -9,8 +9,8 @@ export interface Post {
   authorId: number;
   createdAt: Date;
   updatedAt: Date;
-  comment: Comment[];
-  like: Like[];
+  comment?: Comment[];
+  like?: Like[];
   isPlaceholder?: boolean;
 }
 
@@ -18,7 +18,7 @@ export interface PostCRUD {
   content: string;
   author?: User;
   authorId: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   isPlaceholder?: boolean;
 }
