@@ -6,7 +6,7 @@ export interface Comment {
   content: string;
   createdAt?: Date;
   user?: User;
-  like: Like[];
+  like?: Like[];
   userId: number;
   postId: number;
 }
