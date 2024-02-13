@@ -1,7 +1,7 @@
 import React from "react";
 
 import { postsApiService } from "../../utils/api/post";
-import Delete from "../Common/Delete";
+import Delete from "../Shared/Delete";
 
 interface DeletePostProps {
   userId: number;

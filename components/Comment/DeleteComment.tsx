@@ -1,7 +1,7 @@
 import React from "react";
 
 import { commentsApiService } from "../../utils/api/comment";
-import Delete from "../Common/Delete";
+import Delete from "../Shared/Delete";
 
 interface DeleteCommentProps {
   userId: number;

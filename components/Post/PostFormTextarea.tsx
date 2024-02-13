@@ -1,7 +1,7 @@
 import React from "react";
 
 import { PostValidation } from "../../utils/validation/postValidation";
-import FormTextarea from "../Common/FormTextarea";
+import FormTextarea from "../Shared/FormTextarea";
 
 interface PostFormTextareaProps {
   isUpdatePost?: boolean;
