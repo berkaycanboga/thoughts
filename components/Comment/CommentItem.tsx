@@ -1,13 +1,6 @@
-import { getSession } from "next-auth/react";
-import React, { useEffect, useState } from "react";
-import { BsThreeDots, BsDot } from "react-icons/bs";
+import React from "react";
 
-import { commentsApiService } from "../../utils/api/comment";
-import { calculateTimeAgo } from "../../utils/time";
-import Dropdown from "../Common/Dropdown";
-import LikeCommentItem from "../Like/LikeCommentItem";
-
-import DeleteComment from "./DeleteComment";
+import SharedItem from "../Shared/SharedItem";
 
 interface CommentItemProps {
   userId: number;
@@ -30,72 +23,18 @@ const CommentItem = ({
   createdAt,
   onCommentDelete,
 }: CommentItemProps) => {
-  const timeAgo = calculateTimeAgo(createdAt);
-  const [commentOwner, setCommentOwner] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchCommentOwner = async () => {
-      try {
-        const session = await getSession();
-        const currentUserId = session?.user.id;
-
-        await commentsApiService.getCommentByPostId(postId, commentId);
-
-        if (currentUserId === userId) {
-          setCommentOwner(userId);
-        }
-      } catch (error) {
-        console.error("Error fetching comment details:", error);
-      }
-    };
-
-    fetchCommentOwner();
-  }, [userId, postId, commentId]);
-
-  const isOwner = commentOwner === userId;
-  const showDropdown = isOwner;
-
   return (
-    <div className="relative">
-      <div className="p-3 bg-white rounded-md shadow-md h-auto min-h-32 mt-4">
-        <div className="text-lg mb-1">
-          <div className="flex items-center">
-            <span className="font-bold text-base">{fullName}</span>
-            <BsDot className="mx-1 text-gray-500" />
-            <span className="text-gray-600 text-sm">@{username}</span>
-            <BsDot className="mx-1 text-gray-500" />
-            <span className="text-xs text-gray-500">{timeAgo}</span>
-          </div>
-          <p className="text-sm mb-1 mt-2">{content}</p>
-        </div>
-
-        {showDropdown && (
-          <div className="absolute top-0 right-0 mt-2 mr-2">
-            <Dropdown
-              trigger={
-                <div className="cursor-pointer flex items-center justify-center text-gray-500 rounded-md text-xl w-6 h-6 hover:bg-gray-100">
-                  <BsThreeDots />
-                </div>
-              }
-            >
-              <DeleteComment
-                userId={userId}
-                postId={postId}
-                commentId={commentId}
-                onCommentDelete={() => onCommentDelete(commentId)}
-              />
-            </Dropdown>
-          </div>
-        )}
-      </div>
-      <div className="absolute bottom-0 w-full p-1 flex justify-end">
-        <LikeCommentItem
-          userId={userId}
-          postId={postId}
-          commentId={commentId}
-        />
-      </div>
-    </div>
+    <SharedItem
+      itemType="comment"
+      userId={userId}
+      postId={postId}
+      commentId={commentId}
+      content={content}
+      fullName={fullName}
+      username={username}
+      createdAt={createdAt}
+      onCommentDelete={onCommentDelete}
+    />
   );
 };
 
