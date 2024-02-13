@@ -62,11 +62,9 @@ const Post = ({ post }: PostProps) => {
     handleCommentDeleteUtil(postState, commentId, setPost);
   };
 
-  const sortedComments = postState?.comment.sort((a, b) => {
+  const sortedComments = postState?.comment!.sort((a, b) => {
     return new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime();
   });
-
-  console.log(sortedComments);
 
   return (
     <>
