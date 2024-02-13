@@ -112,7 +112,7 @@ const PostItem = ({
           </Dropdown>
         </div>
       )}
-      <div className="absolute bottom-0 w-full p-1 flex justify-end">
+      <div className="absolute bottom-0 right-0 p-1 flex">
         <LikePostItem userId={userId} postId={postId} />
         <CreateCommentFormPopup userId={userId} postId={postId} />
       </div>
