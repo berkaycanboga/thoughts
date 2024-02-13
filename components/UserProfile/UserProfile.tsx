@@ -4,6 +4,10 @@ import React, { useEffect, useState } from "react";
 
 import { Post } from "../../models/Post";
 import { postsApiService } from "../../utils/api/post";
+import {
+  handleDeletePostFeed,
+  handleUpdatePostFeed,
+} from "../../utils/post/post";
 import PostContainer from "../Common/PostContainer";
 import PostItem from "../Post/PostItem";
 
@@ -34,17 +38,11 @@ const UserProfile = ({ userId }: UserProfileProps) => {
   }, [userId]);
 
   const handleUpdatePost = async (postId: number, editedContent: string) => {
-    setUserPosts((prevUserPosts) =>
-      prevUserPosts.map((post) =>
-        post.id === postId ? { ...post, content: editedContent } : post,
-      ),
-    );
+    handleUpdatePostFeed(postId, editedContent, userPosts, setUserPosts);
   };
 
   const handleDeletePost = async (postId: number) => {
-    setUserPosts((prevUserPosts) =>
-      prevUserPosts.filter((post) => post.id !== postId),
-    );
+    handleDeletePostFeed(postId, userPosts, setUserPosts);
   };
 
   const sortedUserPosts = userPosts.slice().sort((a, b) => {

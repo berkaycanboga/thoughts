@@ -4,6 +4,10 @@ import React, { useState, useEffect } from "react";
 
 import { Post } from "../../models/Post";
 import { processNewPosts } from "../../utils/api/mainFeed";
+import {
+  handleDeletePostFeed,
+  handleUpdatePostFeed,
+} from "../../utils/post/post";
 import PostContainer from "../Common/PostContainer";
 import CreatePostForm from "../Post/CreatePostForm";
 import LoadingPlaceholder from "../Post/PlaceholderPost";
@@ -52,17 +56,11 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
   };
 
   const handleUpdatePost = async (postId: number, editedContent: string) => {
-    setMainFeed((prevMainFeed) =>
-      prevMainFeed.map((post) =>
-        post.id === postId ? { ...post, content: editedContent } : post,
-      ),
-    );
+    handleUpdatePostFeed(postId, editedContent, mainFeed, setMainFeed);
   };
 
   const handleDeletePost = async (postId: number) => {
-    setMainFeed((prevMainFeed) =>
-      prevMainFeed.filter((post) => post.id !== postId),
-    );
+    handleDeletePostFeed(postId, mainFeed, setMainFeed);
   };
 
   const handleShowNewPosts = () => {

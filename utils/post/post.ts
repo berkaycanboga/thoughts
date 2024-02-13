@@ -11,6 +11,27 @@ export const handleUpdatePost = (
   }));
 };
 
+export const handleUpdatePostFeed = async (
+  postId: number,
+  editedContent: string,
+  posts: PostModel[],
+  setPosts: React.Dispatch<React.SetStateAction<PostModel[]>>,
+) => {
+  setPosts((prevPosts) =>
+    prevPosts.map((post) =>
+      post.id === postId ? { ...post, content: editedContent } : post,
+    ),
+  );
+};
+
+export const handleDeletePostFeed = async (
+  postId: number,
+  posts: PostModel[],
+  setPosts: React.Dispatch<React.SetStateAction<PostModel[]>>,
+) => {
+  setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+};
+
 export const handleDeletePost = (
   setPost: React.Dispatch<React.SetStateAction<PostModel | null>>,
 ) => {
