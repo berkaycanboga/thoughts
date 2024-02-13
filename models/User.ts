@@ -7,6 +7,12 @@ export interface User {
   password?: string;
 }
 
+export interface UserCRUD {
+  username?: string;
+  fullName?: string;
+  email?: string;
+}
+
 export interface SignUpUser {
   fullName: string;
   username: string;

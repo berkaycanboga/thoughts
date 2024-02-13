@@ -51,8 +51,18 @@ export const api = {
   post: <T>(url: string, data?: { content: string }) =>
     handleResponse(axiosInstance.post<T>(createUrl(url), data)),
   get: <T>(url: string) => handleResponse(axiosInstance.get<T>(createUrl(url))),
-  put: <T>(url: string, data?: { content: string }) =>
-    handleResponse(axiosInstance.put<T>(createUrl(url), data)),
+  put: <T>(
+    url: string,
+    data?: {
+      content?: string;
+      userData?: { username?: string; fullName?: string; email?: string };
+    },
+  ) => {
+    const { content, userData } = data || {};
+    return handleResponse(
+      axiosInstance.put<T>(createUrl(url), { content, ...userData }),
+    );
+  },
   delete: <T>(url: string) =>
     handleResponse(axiosInstance.delete<T>(createUrl(url))),
 };
@@ -62,6 +72,8 @@ export const urls = {
   user: (userId: number) => createUrl(`/user${userId ? `/${userId}` : ""}`),
   userPosts: (userId: number, postId?: number) =>
     createUrl(`/user/${userId}/posts${postId ? `/${postId}` : ""}`),
+  userLikedPosts: (userId: number) => createUrl(`/user/${userId}/likes`),
+  userCommentsPosts: (userId: number) => createUrl(`/user/${userId}/comments`),
   postComments: (userId: number, postId: number, commentId?: number) =>
     createUrl(
       `/user/${userId}/posts/${postId}/comments${commentId ? `/${commentId}` : ""}`,
