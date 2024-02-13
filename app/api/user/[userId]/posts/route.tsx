@@ -36,5 +36,5 @@ export async function GET(req: Request, ctx: { params: { userId: string } }) {
   const userId = parseInt(ctx.params.userId, 10);
   const userPosts = await getUserPostsController(userId);
 
-  return NextResponse.json({ userPosts });
+  return NextResponse.json({ ...userPosts });
 }
