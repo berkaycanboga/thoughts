@@ -9,7 +9,9 @@ export const processNewPosts = async (
   setShowNewPosts: React.Dispatch<React.SetStateAction<boolean>>,
   setMainFeed: React.Dispatch<React.SetStateAction<Post[]>>,
 ) => {
-  const response = await api.get<{ combinedPosts: Post[] }>(urls.user(userId));
+  const response = await api.get<{ combinedPosts: Post[] }>(
+    urls.user(userId) + "/dashboard",
+  );
   const data = response.combinedPosts;
 
   console.log(data);
