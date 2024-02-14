@@ -1,27 +1,17 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
 
-import {
-  getUserPostsController,
-  getUserFollowingPostsController,
-} from "../../../../controllers/PostController";
 import {
   deleteUserController,
+  getUserByIdController,
   updateUserController,
 } from "../../../../controllers/UserController";
-import { authOptions } from "../../auth/[...nextauth]/options";
 
-export async function GET() {
-  const session = await getServerSession(authOptions);
+export async function GET(req: Request, ctx: { params: { userId: string } }) {
+  const userId = parseInt(ctx.params.userId, 10);
 
-  const userId = session?.user.id as number;
+  const user = await getUserByIdController(userId);
 
-  const userPosts = await getUserPostsController(userId);
-  const userFollowingPosts = await getUserFollowingPostsController(userId);
-
-  const combinedPosts = [...userPosts, ...userFollowingPosts];
-
-  return NextResponse.json({ combinedPosts });
+  return NextResponse.json({ ...user });
 }
 
 export async function PUT(req: Request, ctx: { params: { userId: string } }) {
