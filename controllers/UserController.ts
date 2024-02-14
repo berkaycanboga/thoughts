@@ -3,9 +3,14 @@ import {
   deleteUser,
   getLikedPostsByUserId,
   getPostsByUserComments,
+  getUserById,
   getUserIdByUsername,
   updateUser,
 } from "../services/UserService";
+
+export const getUserByIdController = async (userId: number) => {
+  return getUserById(userId);
+};
 
 export const getUserIdByUsernameController = async (username: string) => {
   return getUserIdByUsername(username);

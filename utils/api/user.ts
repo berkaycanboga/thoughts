@@ -3,6 +3,10 @@ import { Post } from "../../models/Post";
 import { api, urls } from "./api";
 
 export const userApiService = {
+  getUser: async (userId: number) => {
+    return api.get(urls.user(userId));
+  },
+
   updateUser: async (
     userId: number,
     userData: { username?: string; fullName?: string; email?: string },

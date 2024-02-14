@@ -77,7 +77,7 @@ const UserProfile = ({ userId }: UserProfileProps) => {
   return (
     <>
       <PostContainer>
-        <UserInfo />
+        <UserInfo userId={userId} />
         <div className="mb-4">
           {activeButton === "posts" && counts.posts > 0 && (
             <p className="text-gray-600">{counts.posts} Posts</p>
