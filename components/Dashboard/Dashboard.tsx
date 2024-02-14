@@ -108,11 +108,7 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
         </div>
       )}
 
-      {showPlaceholderPost && (
-        <div className="mb-4 p-3 bg-white rounded-md shadow-md h-auto min-h-40">
-          <LoadingPlaceholder />
-        </div>
-      )}
+      {showPlaceholderPost && <LoadingPlaceholder />}
       {[...sortedMainFeed].map((post) => (
         <React.Fragment key={post.id}>
           <PostItem
