@@ -28,21 +28,19 @@ const PostItem = ({
   alreadyLink = false,
 }: PostItemProps) => {
   return (
-    <div className="relative">
-      <SharedItem
-        itemType="post"
-        userId={userId}
-        postId={postId}
-        content={content}
-        fullName={fullName}
-        username={username}
-        createdAt={createdAt}
-        updatedAt={updatedAt}
-        onPostUpdate={onPostUpdate}
-        onPostDelete={onPostDelete}
-        alreadyLink={alreadyLink}
-      />
-    </div>
+    <SharedItem
+      itemType="post"
+      userId={userId}
+      postId={postId}
+      content={content}
+      fullName={fullName}
+      username={username}
+      createdAt={createdAt}
+      updatedAt={updatedAt}
+      onPostUpdate={onPostUpdate}
+      onPostDelete={onPostDelete}
+      alreadyLink={alreadyLink}
+    />
   );
 };
 
