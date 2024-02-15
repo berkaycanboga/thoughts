@@ -47,6 +47,14 @@ const Sidebar = () => {
   const toggleSearch = () => setIsSearchOpen(!isSearchOpen);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+  const shouldRenderSidebar = !["/signin", "/signup", "/logout"].includes(
+    pathname,
+  );
+
+  if (!shouldRenderSidebar) {
+    return null;
+  }
+
   const renderLink = ({ path, icon: Icon, label }: LinkProps): JSX.Element => (
     <Link
       href={path}
