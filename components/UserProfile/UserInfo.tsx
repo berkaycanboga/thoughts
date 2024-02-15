@@ -1,59 +1,32 @@
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { Session } from "next-auth";
+import { getSession } from "next-auth/react";
+import React, { useState, useEffect } from "react";
 
 import { User } from "../../models/User";
 import { followApiService } from "../../utils/api/follow";
 import { userApiService } from "../../utils/api/user";
-import Popup from "../Common/Popup";
+
+import FollowButton from "./FollowButton";
+import ListPopup from "./ListPopup";
 
 interface UserInfoProps {
   userId: number;
 }
 
-interface ListPopupProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  list: { username: string; fullName: string }[];
-}
-
-const ListPopup = ({ isOpen, onClose, title, list }: ListPopupProps) => {
-  return (
-    <Popup
-      isOpen={isOpen}
-      onClose={onClose}
-      title={title}
-      content={
-        <ul className="divide-y divide-gray-300">
-          {list.map((item, index) => (
-            <li key={index} className="py-2 px-4">
-              <Link
-                href={`/${item.username}`}
-                className="rounded-md hover:bg-gray-100 transition duration-300 block p-2"
-              >
-                <p className="font-semibold">{item.fullName}</p>
-                <p className="text-gray-500">@{item.username}</p>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      }
-      width="w-full max-w-md"
-      height="h-auto"
-    />
-  );
-};
-
 const UserInfo = ({ userId }: UserInfoProps) => {
   const [userData, setUserData] = useState<User | null>(null);
   const [followerList, setFollowerList] = useState<
-    { username: string; fullName: string }[]
+    { userId: number; username: string; fullName: string }[]
   >([]);
   const [followingList, setFollowingList] = useState<
     { username: string; fullName: string }[]
   >([]);
   const [showFollowerPopup, setShowFollowerPopup] = useState(false);
   const [showFollowingPopup, setShowFollowingPopup] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
+  const [buttonVisible, setButtonVisible] = useState(false);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -73,6 +46,7 @@ const UserInfo = ({ userId }: UserInfoProps) => {
 
         setFollowerList(
           followers.map((follower: User) => ({
+            userId: follower.id,
             username: follower.username,
             fullName: follower.fullName,
           })),
@@ -91,6 +65,29 @@ const UserInfo = ({ userId }: UserInfoProps) => {
     fetchUserInfo();
   }, [userId]);
 
+  useEffect(() => {
+    const getSessionData = async () => {
+      const session = await getSession();
+      setSession(session);
+    };
+
+    getSessionData();
+  }, []);
+
+  useEffect(() => {
+    if (session && userData && session.user.id === userData.id) {
+      setIsOwnProfile(true);
+    } else {
+      setIsOwnProfile(false);
+    }
+  }, [session, userData]);
+
+  useEffect(() => {
+    if (userData) {
+      setButtonVisible(true);
+    }
+  }, [userData]);
+
   const togglePopup = (
     popupState: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
@@ -98,8 +95,8 @@ const UserInfo = ({ userId }: UserInfoProps) => {
   };
 
   return (
-    <div className="flex items-center py-2 border-b mb-2 ml-auto">
-      <div className="mr-2">
+    <div className="flex items-start py-2 border-b mb-2 ml-auto relative">
+      <div className="mr-2 flex-grow">
         {userData && (
           <>
             <p className="font-bold text-lg mb-0">{userData.fullName}</p>
@@ -141,6 +138,19 @@ const UserInfo = ({ userId }: UserInfoProps) => {
         title="Following"
         list={followingList}
       />
+
+      {buttonVisible && !isOwnProfile && session && (
+        <div className="mt-auto">
+          <FollowButton
+            userId={userId}
+            session={session}
+            followerList={followerList}
+            setFollowerList={setFollowerList}
+            setLoading={setLoading}
+            loading={loading}
+          />
+        </div>
+      )}
     </div>
   );
 };
