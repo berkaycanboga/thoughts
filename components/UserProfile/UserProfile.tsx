@@ -5,10 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Post } from "../../models/Post";
 import { postsApiService } from "../../utils/api/post";
 import { userApiService } from "../../utils/api/user";
-import {
-  handleDeletePostFeed,
-  handleUpdatePostFeed,
-} from "../../utils/post/post";
+import { handleDeletePostFeed, handleUpdatePostFeed } from "../../utils/post";
 import PostContainer from "../Common/PostContainer";
 import PostItem from "../Post/PostItem";
 

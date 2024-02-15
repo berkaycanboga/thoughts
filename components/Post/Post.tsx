@@ -9,8 +9,8 @@ import { Post as PostModel } from "../../models/Post";
 import {
   handleCommentCreateUtil,
   handleCommentDeleteUtil,
-} from "../../utils/post/comment";
-import { handleUpdatePost, handleDeletePost } from "../../utils/post/post";
+} from "../../utils/comment";
+import { handleUpdatePost, handleDeletePost } from "../../utils/post";
 import CommentItem from "../Comment/CommentItem";
 import CreateCommentForm from "../Comment/CreateCommentForm";
 import CommentContainer from "../Common/CommentContainer";

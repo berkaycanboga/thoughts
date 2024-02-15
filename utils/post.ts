@@ -1,4 +1,4 @@
-import { Post as PostModel } from "../../models/Post";
+import { Post as PostModel } from "../models/Post";
 
 export const handleUpdatePost = (
   postId: number,

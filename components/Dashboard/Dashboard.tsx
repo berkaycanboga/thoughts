@@ -4,10 +4,7 @@ import React, { useState, useEffect } from "react";
 
 import { Post } from "../../models/Post";
 import { processNewPosts } from "../../utils/api/mainFeed";
-import {
-  handleDeletePostFeed,
-  handleUpdatePostFeed,
-} from "../../utils/post/post";
+import { handleDeletePostFeed, handleUpdatePostFeed } from "../../utils/post";
 import PostContainer from "../Common/PostContainer";
 import CreatePostForm from "../Post/CreatePostForm";
 import LoadingPlaceholder from "../Post/PlaceholderPost";

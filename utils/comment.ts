@@ -1,5 +1,5 @@
-import { Comment } from "../../models/Comment";
-import { Post as PostModel } from "../../models/Post";
+import { Comment } from "../models/Comment";
+import { Post as PostModel } from "../models/Post";
 
 export const handleCommentCreateUtil = (
   postState: PostModel | null,
