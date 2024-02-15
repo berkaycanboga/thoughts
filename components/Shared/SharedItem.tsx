@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { BsDot, BsThreeDots } from "react-icons/bs";
@@ -50,6 +51,7 @@ const SharedItem = ({
 }: SharedItemProps) => {
   const [childComponentsComplete, setChildComponentsComplete] = useState(false);
   const [owner, setOwner] = useState<number | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchOwner = async () => {
@@ -87,6 +89,10 @@ const SharedItem = ({
   const isOwner = owner === userId;
   const showDropdown = isOwner;
 
+  const navigateToPostPage = () => {
+    router.push(`/${username}/${postId}`);
+  };
+
   const itemContentClass =
     itemType === "post"
       ? !alreadyLink
@@ -98,7 +104,11 @@ const SharedItem = ({
     <div className={itemContentClass}>
       <div className="text-lg mb-1">
         <div className="flex items-center">
-          <Link href={`/${username}`}>
+          <Link
+            href={`/${username}`}
+            className="cursor-pointer"
+            onClick={(e) => e.stopPropagation()}
+          >
             <span className="font-bold text-base hover:underline">
               {fullName}
             </span>{" "}
