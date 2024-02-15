@@ -1,11 +1,8 @@
-import { UserCRUD } from "../models/User";
 import {
-  deleteUser,
   getLikedPostsByUserId,
   getPostsByUserComments,
   getUserById,
   getUserIdByUsername,
-  updateUser,
 } from "../services/UserService";
 
 export const getUserByIdController = async (userId: number) => {
@@ -14,17 +11,6 @@ export const getUserByIdController = async (userId: number) => {
 
 export const getUserIdByUsernameController = async (username: string) => {
   return getUserIdByUsername(username);
-};
-
-export const updateUserController = async (
-  userId: number,
-  updatedData: Partial<UserCRUD>,
-) => {
-  return updateUser(userId, updatedData);
-};
-
-export const deleteUserController = async (userId: number) => {
-  return deleteUser(userId);
 };
 
 export const getLikedPostsByUserIdController = async (userId: number) => {
