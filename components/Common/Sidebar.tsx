@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getSession } from "next-auth/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   BsHouse,
   BsHouseFill,
@@ -187,44 +187,60 @@ const BottomIcons = ({
   renderLink: (props: LinkProps) => JSX.Element;
   isIconFilled: (path: string) => boolean;
   toggleSearch: () => void;
-}) => (
-  <ul className="fixed bottom-0 bg-gray-100 w-full p-4 shadow-md flex justify-around">
-    <li>
-      {renderLink({
-        path: "/dashboard",
-        icon: isIconFilled("/dashboard") ? BsHouseFill : BsHouse,
-        label: "Home",
-      })}
-    </li>
-    <li>
-      <button
-        className="flex items-center p-3 rounded-md hover:bg-gray-100"
-        onClick={toggleSearch}
-      >
-        <BsSearch
-          className={`icon ${!showIconsOnly && "mr-3"} text-gray-500 hover:text-cyan-500 text-2xl`}
-        />
-        {!showIconsOnly && (
-          <span className="hidden sm:inline-block text-lg">Search</span>
-        )}
-      </button>
-    </li>
-    <li>
-      {renderLink({
-        path: "/create",
-        icon: isIconFilled("/create") ? BsPencilFill : BsPencil,
-        label: "Create",
-      })}
-    </li>
-    <li>
-      {renderLink({
-        path: "/profile",
-        icon: isIconFilled("/profile") ? BsPersonFill : BsPerson,
-        label: "Profile",
-      })}
-    </li>
-  </ul>
-);
+}) => {
+  const [profilePath, setProfilePath] = useState<string>("/profile");
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const session = await getSession();
+      if (session) {
+        const userId = session.user.username;
+        setProfilePath(`/${userId}`);
+      }
+    };
+
+    fetchSession();
+  }, []);
+
+  return (
+    <ul className="fixed bottom-0 bg-gray-100 w-full p-4 shadow-md flex justify-around">
+      <li>
+        {renderLink({
+          path: "/dashboard",
+          icon: isIconFilled("/dashboard") ? BsHouseFill : BsHouse,
+          label: "Home",
+        })}
+      </li>
+      <li>
+        <button
+          className="flex items-center p-3 rounded-md hover:bg-gray-100"
+          onClick={toggleSearch}
+        >
+          <BsSearch
+            className={`icon ${!showIconsOnly && "mr-3"} text-gray-500 hover:text-cyan-500 text-2xl`}
+          />
+          {!showIconsOnly && (
+            <span className="hidden sm:inline-block text-lg">Search</span>
+          )}
+        </button>
+      </li>
+      <li>
+        {renderLink({
+          path: "/create",
+          icon: isIconFilled("/create") ? BsPencilFill : BsPencil,
+          label: "Create",
+        })}
+      </li>
+      <li>
+        {renderLink({
+          path: profilePath,
+          icon: isIconFilled("/profile") ? BsPersonFill : BsPerson,
+          label: "Profile",
+        })}
+      </li>
+    </ul>
+  );
+};
 
 const SearchBar = ({
   showIconsOnly,
@@ -234,12 +250,46 @@ const SearchBar = ({
   showIconsOnly: boolean;
   showIconsAtBottom: boolean;
   toggleSearch: () => void;
-}) => (
-  <div
-    className={`fixed ${showIconsAtBottom ? "bottom-0 left-0 right-0 h-full" : "top-0 h-full"} border-r border-gray-300 flex flex-col bg-gray-100 shadow-md p-4 ${showIconsOnly && !showIconsAtBottom ? "" : "min-w-80"}`}
-  >
-    <Search onClose={toggleSearch} />
-  </div>
-);
+}) => {
+  const searchBarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchBarRef.current &&
+        !searchBarRef.current.contains(event.target as Node)
+      ) {
+        toggleSearch();
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        toggleSearch();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [toggleSearch]);
+
+  return (
+    <div
+      ref={searchBarRef}
+      className={`fixed ${
+        showIconsAtBottom ? "bottom-0 left-0 right-0 h-full" : "top-0 h-full"
+      } border-r border-gray-300 flex flex-col bg-gray-100 shadow-md p-4 ${
+        showIconsOnly && !showIconsAtBottom ? "" : "min-w-80"
+      }`}
+    >
+      <Search onClose={toggleSearch} onResultClick={toggleSearch} />
+    </div>
+  );
+};
 
 export default Sidebar;

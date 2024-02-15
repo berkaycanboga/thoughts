@@ -7,9 +7,10 @@ import { searchApiService } from "../../utils/api/search";
 
 interface SearchProps {
   onClose: () => void;
+  onResultClick?: () => void;
 }
 
-const Search = ({ onClose }: SearchProps) => {
+const Search = ({ onClose, onResultClick }: SearchProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +60,9 @@ const Search = ({ onClose }: SearchProps) => {
         <BsArrowLeft className="text-gray-500 text-3xl" />
       </button>
       <div
-        className={`flex items-center border ${isInputFocused ? "border-cyan-300" : "border-gray-300"} rounded-md p-2 mb-4`}
+        className={`flex items-center border ${
+          isInputFocused ? "border-cyan-300" : "border-gray-300"
+        } rounded-md p-2 mb-4`}
       >
         <BsSearch className="text-gray-500 text-xl" />
         <input
@@ -69,7 +72,9 @@ const Search = ({ onClose }: SearchProps) => {
           onChange={handleSearchChange}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          className={`border-none bg-transparent ml-2 focus:outline-none flex-grow text-gray-800 placeholder-gray-500 px-4 py-2 rounded-md ${isInputFocused ? "focus:border-cyan-300" : ""}`}
+          className={`border-none bg-transparent ml-2 focus:outline-none flex-grow text-gray-800 placeholder-gray-500 px-4 py-2 rounded-md ${
+            isInputFocused ? "focus:border-cyan-300" : ""
+          }`}
         />
       </div>
 
@@ -85,6 +90,7 @@ const Search = ({ onClose }: SearchProps) => {
               key={result.id}
               href={result.username}
               className="border-b block py-2 rounded-md pl-3 transition duration-300 ease-in-out hover:bg-gray-200"
+              onClick={() => onResultClick && onResultClick()}
             >
               <p className="text-gray-800 font-semibold">{result.username}</p>
               <p className="text-gray-600">{result.fullName}</p>
