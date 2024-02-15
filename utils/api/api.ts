@@ -72,6 +72,9 @@ export const urls = {
   user: (userId: number) => createUrl(`/user${userId ? `/${userId}` : ""}`),
   userPosts: (userId: number, postId?: number) =>
     createUrl(`/user/${userId}/posts${postId ? `/${postId}` : ""}`),
+  follow: (userId: number) => createUrl(`/user/${userId}/follow`),
+  follower: (userId: number) => createUrl(`/user/${userId}/follower`),
+  following: (userId: number) => createUrl(`/user/${userId}/following`),
   userLikedPosts: (userId: number) => createUrl(`/user/${userId}/likes`),
   userCommentsPosts: (userId: number) => createUrl(`/user/${userId}/comments`),
   postComments: (userId: number, postId: number, commentId?: number) =>
