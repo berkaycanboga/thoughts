@@ -98,9 +98,14 @@ const SharedItem = ({
     <div className={itemContentClass}>
       <div className="text-lg mb-1">
         <div className="flex items-center">
-          <span className="font-bold text-base">{fullName}</span>
-          <BsDot className="mx-1 text-gray-500" />
-          <span className="text-gray-600 text-sm">@{username}</span>
+          <Link href={`/${username}`}>
+            <span className="font-bold text-base hover:underline">
+              {fullName}
+            </span>{" "}
+            <span className="text-gray-600 text-sm hover:underline">
+              @{username}
+            </span>
+          </Link>
           <BsDot className="mx-1 text-gray-500" />
           <span className="text-xs text-gray-500">
             {calculateTimeAgo(createdAt, updatedAt)}
