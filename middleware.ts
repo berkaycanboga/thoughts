@@ -22,8 +22,9 @@ export async function middleware(req: NextRequest) {
 
   const includesLikes = requestedUrl.pathname.includes("/likes");
   const includesComments = requestedUrl.pathname.includes("/comments");
+  const includesFollow = requestedUrl.pathname.includes("/follow");
 
-  if (includesLikes || includesComments) {
+  if (includesLikes || includesComments || includesFollow) {
     if (parseInt(userId) !== currentUser) {
       requestedUrl.pathname = requestedUrl.pathname.replace(
         `/${userId}`,
