@@ -136,7 +136,7 @@ const SharedItem = ({
           ) : itemType === "comment" ? (
             ItemContent
           ) : (
-            <Link href={`/${username}/${postId}`}>{ItemContent}</Link>
+            <div onClick={navigateToPostPage}>{ItemContent}</div>
           )}
           {showDropdown && (
             <div className="absolute top-0 right-0 mt-2 mr-2">
