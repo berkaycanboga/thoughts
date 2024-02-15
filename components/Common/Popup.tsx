@@ -35,12 +35,16 @@ const Popup = ({
       }
     };
 
-    window.addEventListener("keydown", handleEsc);
+    if (isOpen) {
+      window.addEventListener("keydown", handleEsc);
+    } else {
+      window.removeEventListener("keydown", handleEsc);
+    }
 
     return () => {
       window.removeEventListener("keydown", handleEsc);
     };
-  }, [onClose]);
+  }, [isOpen, onClose]);
 
   return (
     <div
