@@ -1,6 +1,12 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-const BASE_URL = "http://localhost:3000/api";
+const isLocalhost = process.env.NODE_ENV === "development";
+const vercelUrl = process.env.VERCEL_URL;
+
+const localhostBaseUrl = "http://localhost:3000";
+const vercelBaseUrl = `/${vercelUrl}/api`;
+
+const BASE_URL = isLocalhost ? localhostBaseUrl : vercelBaseUrl;
 
 interface CustomError {
   error: string;
