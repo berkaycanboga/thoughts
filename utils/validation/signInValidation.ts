@@ -1,8 +1,7 @@
-import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { z, ZodError } from "zod";
 
 const SignInSchema = z.object({
-  identifier: z.string().min(1, "Email or Phone is required"),
+  identifier: z.string().min(1, "Email is required"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
@@ -10,7 +9,7 @@ type SignInValidation = z.infer<typeof SignInSchema>;
 
 export interface SignInValidationResult {
   errors: Record<string, string>;
-  identifierType?: "email" | "phone" | "username";
+  identifierType?: "email" | "username";
 }
 
 export const validateSignIn = (
@@ -20,13 +19,10 @@ export const validateSignIn = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { identifier, password } = SignInSchema.parse(data);
 
-    let identifierType: "email" | "phone" | undefined;
-    const phoneNumber = parsePhoneNumberFromString(identifier, "US");
+    let identifierType: "email" | undefined;
 
     if (z.string().email().safeParse(identifier).success) {
       identifierType = "email";
-    } else if (phoneNumber?.isValid()) {
-      identifierType = "phone";
     }
 
     return {

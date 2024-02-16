@@ -34,7 +34,7 @@ const SignUpForm = () => {
       />
 
       <SharedFormInput
-        label="Email or Phone"
+        label="Email"
         id="identifier"
         name="identifier"
         type="text"

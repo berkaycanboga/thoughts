@@ -25,15 +25,12 @@ export const createUser = async (userData: SignUpUser) => {
 
   const existingUser = await prisma.user.findFirst({
     where: {
-      OR: [
-        { email: identifierType === "email" ? identifier : undefined },
-        { phone: identifierType === "phone" ? identifier : undefined },
-      ],
+      email: identifierType === "email" ? identifier : undefined,
     },
   });
 
   if (existingUser) {
-    throw new Error("Email or phone already in use");
+    throw new Error("Email already in use");
   }
 
   const hashedPassword = await argon2.hash(password);
@@ -43,7 +40,6 @@ export const createUser = async (userData: SignUpUser) => {
       ...rest,
       password: hashedPassword,
       email: identifierType === "email" ? identifier : undefined,
-      phone: identifierType === "phone" ? identifier : undefined,
     },
   });
 

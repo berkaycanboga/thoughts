@@ -15,7 +15,7 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       credentials: {
         identifier: {
-          label: "Username or Email Or Phone",
+          label: "Username or Email",
           placeholder: "e.g. john_doe@gmail.com",
         },
         password: { label: "Password", type: "password" },
@@ -26,7 +26,6 @@ export const authOptions: NextAuthOptions = {
             OR: [
               { username: credentials?.identifier },
               { email: credentials?.identifier },
-              { phone: credentials?.identifier },
             ],
           },
         });
@@ -49,7 +48,6 @@ export const authOptions: NextAuthOptions = {
           username: user.username,
           fullName: user.fullName,
           email: user.email as string,
-          phone: user.phone as string,
         };
       },
     }),
@@ -63,7 +61,6 @@ export const authOptions: NextAuthOptions = {
           username: user.username,
           fullName: user.fullName,
           email: user.email,
-          phone: user.phone,
         };
       }
       return token;
@@ -76,7 +73,6 @@ export const authOptions: NextAuthOptions = {
           username: token.username,
           fullName: token.fullName,
           email: token.email,
-          phone: token.phone,
         },
       };
     },

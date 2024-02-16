@@ -7,7 +7,6 @@ declare module "next-auth" {
     username: string;
     fullName: string;
     email: string;
-    phone: string;
   }
   interface Session {
     user: User & {
@@ -15,14 +14,12 @@ declare module "next-auth" {
       username: string;
       fullName: string;
       email: string;
-      phone: string;
     };
     token: {
       id: number;
       username: string;
       fullName: string;
       email: string;
-      phone: string;
     };
   }
 }

@@ -1,21 +1,17 @@
-import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { z, ZodError } from "zod";
 
 const SignUpSchema = z.object({
   identifier: z
     .string()
-    .min(1, "Email or Phone is required")
+    .min(1, "Email is required")
     .email()
     .refine(
       (value) => {
         if (z.string().email().safeParse(value).success) {
           return true;
         }
-
-        const phoneNumber = parsePhoneNumberFromString(value, "US");
-        return phoneNumber?.isValid();
       },
-      { message: "Invalid email or phone format" },
+      { message: "Invalid email format" },
     ),
   username: z
     .string()
@@ -38,7 +34,7 @@ type SignUpValidation = z.infer<typeof SignUpSchema>;
 
 export interface SignUpValidationResult {
   errors: Record<string, string>;
-  identifierType?: "email" | "phone";
+  identifierType?: "email";
 }
 
 export const validateSignUp = (
@@ -49,15 +45,10 @@ export const validateSignUp = (
     const { identifier, username, fullName, password } =
       SignUpSchema.parse(data);
 
-    let identifierType: "email" | "phone" | undefined;
+    let identifierType: "email" | undefined;
 
     if (z.string().email().safeParse(identifier).success) {
       identifierType = "email";
-    } else {
-      const phoneNumber = parsePhoneNumberFromString(identifier, "US");
-      if (phoneNumber?.isValid()) {
-        identifierType = "phone";
-      }
     }
 
     return {

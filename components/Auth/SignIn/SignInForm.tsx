@@ -10,7 +10,7 @@ const SignInForm = () => {
   return (
     <form onSubmit={formik.handleSubmit} className="mt-8">
       <SharedFormInput
-        label="Username, Email, or Phone"
+        label="Username or Email"
         id="identifier"
         type="text"
         name="identifier"
