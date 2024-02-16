@@ -9,12 +9,12 @@ import {
   BsHouse,
   BsHouseFill,
   BsSearch,
-  BsPencil,
-  BsPencilFill,
   BsPerson,
   BsPersonFill,
+  BsBoxArrowRight,
 } from "react-icons/bs";
 
+import { signOutApi } from "../../utils/api/signOut";
 import Search from "../Search/Search";
 
 interface LinkProps {
@@ -22,6 +22,13 @@ interface LinkProps {
   icon: React.ComponentType<{ className: string }>;
   label: string;
 }
+
+const handleSignOut = async () => {
+  const result = await signOutApi();
+  if (!result.success) {
+    console.error("Error during sign-out:", result.error);
+  }
+};
 
 const useWindowWidth = (): number => {
   const [windowWidth, setWindowWidth] = useState(0);
@@ -43,22 +50,35 @@ const Sidebar = () => {
   const pathname = usePathname();
   const windowWidth = useWindowWidth();
   const isIconFilled = useIsIconFilled(pathname);
+  const [username, setUsername] = useState<string | undefined>();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const session = await getSession();
+      if (session) {
+        const username = session.user.username;
+        setUsername(username);
+      }
+    };
+
+    fetchSession();
+  }, []);
 
   const toggleSearch = () => setIsSearchOpen(!isSearchOpen);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const shouldRenderSidebar = !["/signin", "/signup", "/logout"].includes(
-    pathname,
+  const shouldRenderSidebar = !(
+    pathname.startsWith("/dashboard") || pathname.startsWith("/" + username)
   );
 
-  if (!shouldRenderSidebar) {
+  if (shouldRenderSidebar) {
     return null;
   }
 
   const renderLink = ({ path, icon: Icon, label }: LinkProps): JSX.Element => (
     <Link
       href={path}
-      className="flex items-center p-3 rounded-md hover:bg-gray-100 w-full"
+      className="flex items-center p-3 hover:bg-cyan-100 rounded-md transition duration-300 ease-in-out w-full"
     >
       <Icon
         className={`icon ${!showIconsOnly && "mr-3"} ${isIconFilled(path) ? "text-cyan-500" : "text-gray-500 hover:text-cyan-500"} text-2xl`}
@@ -155,7 +175,7 @@ const SidebarContent = ({
         </li>
         <li>
           <button
-            className="flex items-center p-3 rounded-md hover:bg-gray-100 w-full"
+            className="flex items-center p-3 hover:bg-cyan-100 rounded-md transition duration-300 ease-in-out w-full"
             onClick={toggleSearch}
           >
             <BsSearch
@@ -168,17 +188,23 @@ const SidebarContent = ({
         </li>
         <li>
           {renderLink({
-            path: "/create",
-            icon: isIconFilled("/create") ? BsPencilFill : BsPencil,
-            label: "Create",
-          })}
-        </li>
-        <li>
-          {renderLink({
             path: profilePath,
             icon: isIconFilled(profilePath) ? BsPersonFill : BsPerson,
             label: "Profile",
           })}
+        </li>
+        <li>
+          <button
+            className="flex items-center hover:bg-cyan-100 rounded-md transition duration-300 ease-in-out p-3 w-full"
+            onClick={handleSignOut}
+          >
+            <BsBoxArrowRight
+              className={`icon ${!showIconsOnly && "mr-3"} text-gray-500 hover:text-cyan-500 text-2xl`}
+            />
+            {!showIconsOnly && (
+              <span className="hidden sm:inline-block text-lg">Sign Out</span>
+            )}
+          </button>
         </li>
       </ul>
     </div>
@@ -221,7 +247,7 @@ const BottomIcons = ({
       </li>
       <li>
         <button
-          className="flex items-center p-3 rounded-md hover:bg-gray-100"
+          className="flex items-center p-3 hover:bg-cyan-100 rounded-md transition duration-300 ease-in-out"
           onClick={toggleSearch}
         >
           <BsSearch
@@ -234,17 +260,23 @@ const BottomIcons = ({
       </li>
       <li>
         {renderLink({
-          path: "/create",
-          icon: isIconFilled("/create") ? BsPencilFill : BsPencil,
-          label: "Create",
-        })}
-      </li>
-      <li>
-        {renderLink({
           path: profilePath,
           icon: isIconFilled("/profile") ? BsPersonFill : BsPerson,
           label: "Profile",
         })}
+      </li>
+      <li>
+        <button
+          className="flex items-center p-3 hover:bg-cyan-100 rounded-md transition duration-300 ease-in-out"
+          onClick={handleSignOut}
+        >
+          <BsBoxArrowRight
+            className={`icon ${!showIconsOnly && "mr-3"} text-gray-500 hover:text-cyan-500 text-2xl`}
+          />
+          {!showIconsOnly && (
+            <span className="hidden sm:inline-block text-lg">Sign Out</span>
+          )}
+        </button>
       </li>
     </ul>
   );
