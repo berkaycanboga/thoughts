@@ -12,7 +12,7 @@ interface FormTextareaProps {
   onSubmit: (values: PostValidation) => void;
   isLoading: boolean;
   buttonText: string;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 const FormTextarea = ({

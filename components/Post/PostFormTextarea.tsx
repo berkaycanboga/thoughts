@@ -9,7 +9,7 @@ interface PostFormTextareaProps {
   onSubmit: (values: PostValidation) => void;
   isLoading: boolean;
   onContentChange?: (content: string) => void;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 const PostFormTextarea = ({
