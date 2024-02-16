@@ -1,7 +1,7 @@
 {
   "name": "microblogging-next",
   "version": "1.0.0",
-  "description": "",
+  "description": "A microblogging platform built with Next.js and React.",
   "directories": {
     "test": "tests"
   },
@@ -9,10 +9,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write ."
   },
   "keywords": [],
-  "author": "",
+  "author": "https://github.com/berkaycanboga/thoughts",
   "license": "ISC",
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
@@ -50,3 +52,4 @@
     "typescript": "^5.3.3"
   }
 }
+
