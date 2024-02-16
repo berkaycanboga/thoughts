@@ -9,6 +9,7 @@ interface PostFormTextareaProps {
   onSubmit: (values: PostValidation) => void;
   isLoading: boolean;
   onContentChange?: (content: string) => void;
+  disabled: boolean;
 }
 
 const PostFormTextarea = ({
@@ -16,6 +17,7 @@ const PostFormTextarea = ({
   initialValues,
   onSubmit,
   isLoading,
+  disabled,
 }: PostFormTextareaProps) => {
   return (
     <FormTextarea
@@ -23,6 +25,7 @@ const PostFormTextarea = ({
       onSubmit={onSubmit}
       isLoading={isLoading}
       buttonText={isUpdatePost ? "Update Post" : "Create Post"}
+      disabled={disabled}
     />
   );
 };

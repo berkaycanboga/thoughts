@@ -10,9 +10,14 @@ import PostFormTextarea from "./PostFormTextarea";
 interface CreatePostFormProps {
   userId: number;
   onSuccess: (createdPost: Post) => void;
+  disabled: boolean;
 }
 
-const CreatePostForm = ({ userId, onSuccess }: CreatePostFormProps) => {
+const CreatePostForm = ({
+  userId,
+  onSuccess,
+  disabled,
+}: CreatePostFormProps) => {
   const { error, handleError, resetError } = useErrorHandling();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,6 +30,10 @@ const CreatePostForm = ({ userId, onSuccess }: CreatePostFormProps) => {
 
   const handleSubmit = async (values: PostValidation) => {
     try {
+      if (disabled) {
+        return;
+      }
+
       setIsLoading(true);
       resetError();
 
@@ -49,6 +58,7 @@ const CreatePostForm = ({ userId, onSuccess }: CreatePostFormProps) => {
         initialValues={{ postContent: "" }}
         onSubmit={handleSubmit}
         isLoading={isLoading}
+        disabled={disabled}
       />
     </div>
   );

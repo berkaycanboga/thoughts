@@ -24,10 +24,12 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
   const [isManualPostCreationInProgress, setManualPostCreationInProgress] =
     useState(false);
   const [showPlaceholderPost, setShowPlaceholderPost] = useState(false);
+  const [isCreatingPost, setIsCreatingPost] = useState(false);
 
   const handleCreatePost = async (createdPost: Post) => {
     setShowPlaceholderPost(true);
     setManualPostCreationInProgress(true);
+    setIsCreatingPost(true);
 
     if (createdPost.author?.id === userId) {
       setMainFeed((prevMainFeed) => [createdPost, ...prevMainFeed]);
@@ -48,6 +50,7 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
         setShowNewPosts,
         setMainFeed,
       );
+      setIsCreatingPost(false);
       setShowPlaceholderPost(false);
     }, 1500);
   };
@@ -91,7 +94,11 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
   return (
     <PostContainer>
       <div className="pb-4 border-b border-gray-200 mb-4">
-        <CreatePostForm userId={userId} onSuccess={handleCreatePost} />
+        <CreatePostForm
+          userId={userId}
+          onSuccess={handleCreatePost}
+          disabled={isCreatingPost}
+        />
       </div>
 
       {newPosts.length > 0 && !showNewPosts && (

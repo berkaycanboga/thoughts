@@ -12,6 +12,7 @@ interface FormTextareaProps {
   onSubmit: (values: PostValidation) => void;
   isLoading: boolean;
   buttonText: string;
+  disabled: boolean;
 }
 
 const FormTextarea = ({
@@ -19,6 +20,7 @@ const FormTextarea = ({
   onSubmit,
   isLoading,
   buttonText,
+  disabled,
 }: FormTextareaProps) => {
   const formik = useFormik({
     initialValues,
@@ -80,6 +82,7 @@ const FormTextarea = ({
           onBlur={formik.handleBlur}
           className={`w-full min-h-[4rem] h-auto px-4 py-2 border rounded-md bg-gray-100 focus:outline-none focus:border-cyan-300 text-gray-800 resize-none relative`}
           name="postContent"
+          disabled={disabled}
         />
         <div
           className={`absolute bottom-2 right-2 flex items-center justify-center ${counterClasses}`}
