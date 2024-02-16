@@ -17,7 +17,7 @@ export const signInApi = async (data: LoginUser) => {
       return { error: "Invalid username, email, or password" };
     }
 
-    return { success: true && (window.location.href = "/dashboard") };
+    return { success: true };
   } catch (error) {
     console.error("Error during sign-in:", error);
 

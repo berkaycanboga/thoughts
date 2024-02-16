@@ -5,7 +5,7 @@ import SharedFormInput from "../Shared/SharedFormInput";
 import useSignUpFormLogic from "./useSignUpFormLogic";
 
 const SignUpForm = () => {
-  const { formik } = useSignUpFormLogic();
+  const { formik, error } = useSignUpFormLogic();
 
   return (
     <form onSubmit={formik.handleSubmit} className="mt-8">
@@ -56,6 +56,14 @@ const SignUpForm = () => {
         touched={formik.touched.password!}
         error={formik.errors.password}
       />
+
+      {error && (
+        <p
+          className={`text-red-500 text-sm mt-2 mb-4 transition-opacity duration-300 ${error ? "opacity-100" : "opacity-0"}`}
+        >
+          {error}
+        </p>
+      )}
 
       <button
         type="submit"

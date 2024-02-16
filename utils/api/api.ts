@@ -3,7 +3,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 const isLocalhost = process.env.NODE_ENV === "development";
 const vercelUrl = process.env.VERCEL_URL;
 
-const localhostBaseUrl = "http://localhost:3000";
+const localhostBaseUrl = "http://localhost:3000/api";
 const vercelBaseUrl = `/${vercelUrl}/api`;
 
 const BASE_URL = isLocalhost ? localhostBaseUrl : vercelBaseUrl;

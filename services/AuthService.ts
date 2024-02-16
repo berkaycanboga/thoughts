@@ -23,14 +23,24 @@ export const createUser = async (userData: SignUpUser) => {
 
   const { identifierType } = validation;
 
-  const existingUser = await prisma.user.findFirst({
+  const existingUserEmail = await prisma.user.findFirst({
     where: {
       email: identifierType === "email" ? identifier : undefined,
     },
   });
 
-  if (existingUser) {
-    throw new Error("Email already in use");
+  const existingUserUsername = await prisma.user.findFirst({
+    where: {
+      username: userData.username,
+    },
+  });
+
+  if (existingUserEmail) {
+    throw new Error("Email already exists.");
+  }
+
+  if (existingUserUsername) {
+    throw new Error("Username already exists.");
   }
 
   const hashedPassword = await argon2.hash(password);

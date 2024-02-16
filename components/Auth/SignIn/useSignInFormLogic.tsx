@@ -1,4 +1,5 @@
 import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { signInApi } from "../../../utils/api/signIn";
@@ -9,6 +10,7 @@ import {
 
 const useSignInFormLogic = () => {
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -18,8 +20,9 @@ const useSignInFormLogic = () => {
     onSubmit: async (values) => {
       try {
         const result = await signInApi(values);
-
-        if (result.error) {
+        if (result.success) {
+          router.push("/dashboard");
+        } else if (result.error) {
           if (result.error.toLowerCase().includes("user not found")) {
             setError(
               "Account not found. Please check your credentials or sign up if you don't have an account.",
