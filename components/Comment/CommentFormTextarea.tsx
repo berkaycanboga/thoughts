@@ -7,12 +7,14 @@ interface CommentFormTextareaProps {
   initialValues: PostValidation;
   onSubmit: (values: PostValidation) => void;
   isLoading: boolean;
+  disabled: boolean;
 }
 
 const CommentFormTextarea = ({
   initialValues,
   onSubmit,
   isLoading,
+  disabled,
 }: CommentFormTextareaProps) => {
   return (
     <FormTextarea
@@ -20,6 +22,7 @@ const CommentFormTextarea = ({
       onSubmit={onSubmit}
       isLoading={isLoading}
       buttonText="Comment"
+      disabled={disabled}
     />
   );
 };

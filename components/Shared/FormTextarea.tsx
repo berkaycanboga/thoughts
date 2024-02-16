@@ -108,7 +108,7 @@ const FormTextarea = ({
         {isLoading ? (
           <div className="flex items-center justify-center space-x-2">
             <div className="w-4 h-4 border-t-2 border-r-2 border-white rounded-full animate-spin"></div>
-            <span>{` ${buttonText}ing...`}</span>
+            <span>{"Creating..."}</span>
           </div>
         ) : (
           buttonText
