@@ -7,7 +7,7 @@ interface AuthLayoutProps {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
-    <div className="min-h-screen flex flex-col items-start p-8 bg-gray-100">
+    <div className="min-h-screen flex flex-col items-start p-8">
       <div className="mb-8">
         <Image
           src="/logo.svg"
