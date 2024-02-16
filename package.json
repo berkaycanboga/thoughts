@@ -10,8 +10,7 @@
     "build": "next build",
     "start": "next start",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext .ts,.tsx",
-    "format": "prettier --write ."
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "keywords": [],
   "author": "https://github.com/berkaycanboga/thoughts",
