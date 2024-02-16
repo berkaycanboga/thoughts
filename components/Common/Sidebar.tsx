@@ -68,7 +68,7 @@ const Sidebar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const shouldRenderSidebar = !(
-    pathname.startsWith("/dashboard") || pathname.startsWith("/" + username)
+    pathname.startsWith("/dashboard") || pathname.startsWith(`/${username}`)
   );
 
   if (shouldRenderSidebar) {

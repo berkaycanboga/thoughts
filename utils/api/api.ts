@@ -50,24 +50,17 @@ const handleResponse = async <T>(
   }
 };
 
-const createUrl = (url: string) => `${url}`;
+const createUrl = (url: string) => {
+  const cleanUrl = url.replace(/^(\/api)+/, "/api");
+  return cleanUrl;
+};
 
 export const api = {
   post: <T>(url: string, data?: { content: string }) =>
     handleResponse(axiosInstance.post<T>(createUrl(url), data)),
   get: <T>(url: string) => handleResponse(axiosInstance.get<T>(createUrl(url))),
-  put: <T>(
-    url: string,
-    data?: {
-      content?: string;
-      userData?: { username?: string; fullName?: string; email?: string };
-    },
-  ) => {
-    const { content, userData } = data || {};
-    return handleResponse(
-      axiosInstance.put<T>(createUrl(url), { content, ...userData }),
-    );
-  },
+  put: <T>(url: string, data?: { content: string }) =>
+    handleResponse(axiosInstance.put<T>(createUrl(url), data)),
   delete: <T>(url: string) =>
     handleResponse(axiosInstance.delete<T>(createUrl(url))),
 };
