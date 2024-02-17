@@ -50,10 +50,7 @@ const handleResponse = async <T>(
   }
 };
 
-const createUrl = (url: string) => {
-  const cleanUrl = url.replace(/^(\/api)+/, "/api");
-  return cleanUrl;
-};
+const createUrl = (url: string) => `${url}`;
 
 export const api = {
   post: <T>(url: string, data?: { content: string }) =>
