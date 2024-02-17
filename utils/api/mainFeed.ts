@@ -14,8 +14,6 @@ export const processNewPosts = async (
   );
   const data = response.combinedPosts;
 
-  console.log(data);
-
   if (Array.isArray(data)) {
     const newPostsData = data.filter(
       (newPost: Post) =>
