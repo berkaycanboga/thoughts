@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BsChatSquare } from "react-icons/bs";
 
-import { Comment } from "../../models/Comment";
+import { CommentProps } from "../../models/Comment";
 import { commentsApiService } from "../../utils/api/comment";
 import Popup from "../Common/Popup";
 
@@ -26,7 +26,7 @@ const CreateCommentFormPopup = ({
           userId,
           postId,
         );
-        const comments: Comment[] = Object.values(response);
+        const comments: CommentProps[] = Object.values(response);
 
         setCommentCount(comments.length);
       } catch (error) {

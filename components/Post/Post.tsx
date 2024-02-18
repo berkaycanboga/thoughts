@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
-import { Comment } from "../../models/Comment";
-import { Post as PostModel } from "../../models/Post";
+import { CommentProps } from "../../models/Comment";
+import { PostProps } from "../../models/Post";
 import {
   handleCommentCreateUtil,
   handleCommentDeleteUtil,
@@ -18,14 +18,13 @@ import PostContainer from "../Common/PostContainer";
 
 import PostItem from "./PostItem";
 
-interface PostProps {
-  post: PostModel;
+interface PostPageProps {
+  post: PostProps;
 }
 
-const Post = ({ post }: PostProps) => {
+const Post = ({ post }: PostPageProps) => {
   const router = useRouter();
-  const [content, setContent] = useState(post.content);
-  const [postState, setPost] = useState<PostModel | null>(post);
+  const [postState, setPost] = useState<PostProps | null>(post);
   const [userId, setUserId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
@@ -42,19 +41,18 @@ const Post = ({ post }: PostProps) => {
     fetchUser();
   }, []);
 
-  const handleUpdate = async (updatedContent: string) => {
+  const handleUpdate = (updatedContent: string) => {
+    console.log("Updating post content:", updatedContent);
     handleUpdatePost(post.id as number, updatedContent, setPost);
-    setContent(updatedContent);
   };
-
-  const handleDelete = async () => {
+  const handleDelete = () => {
     const isSuccess = handleDeletePost(setPost);
     if (isSuccess) {
       router.back();
     }
   };
 
-  const handleCommentCreate = async (newComment: Comment) => {
+  const handleCommentCreate = async (newComment: CommentProps) => {
     handleCommentCreateUtil(postState, newComment, setPost);
   };
 
@@ -62,7 +60,7 @@ const Post = ({ post }: PostProps) => {
     handleCommentDeleteUtil(postState, commentId, setPost);
   };
 
-  const sortedComments = postState?.comment!.sort((a, b) => {
+  const sortedComments = postState?.comment.sort((a, b) => {
     return new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime();
   });
 
@@ -71,14 +69,10 @@ const Post = ({ post }: PostProps) => {
       <PostContainer>
         <PostItem
           alreadyLink={true}
-          userId={postState?.author?.id as number}
-          postId={postState?.id as number}
-          content={content}
-          username={postState?.author?.username as string}
-          fullName={postState?.author?.fullName as string}
-          createdAt={postState?.createdAt as Date}
-          updatedAt={postState?.updatedAt as Date}
-          onPostUpdate={handleUpdate}
+          {...post}
+          userId={userId}
+          content={postState!.content}
+          onPostUpdate={(updatedContent) => handleUpdate(updatedContent)}
           onPostDelete={handleDelete}
         />
       </PostContainer>
@@ -91,13 +85,9 @@ const Post = ({ post }: PostProps) => {
         {sortedComments?.map((comment) => (
           <CommentItem
             key={`comment-${comment.id}`}
+            {...comment}
             userId={comment.userId}
             postId={postState!.id!}
-            commentId={comment.id!}
-            content={comment.content}
-            fullName={comment.user?.fullName as string}
-            username={comment.user?.username as string}
-            createdAt={comment.createdAt as Date}
             onCommentDelete={() => {
               handleCommentDelete(comment.id!);
             }}

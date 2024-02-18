@@ -1,11 +1,12 @@
+import { User } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { BsDot, BsThreeDots } from "react-icons/bs";
 
-import { commentsApiService } from "../../utils/api/comment";
-import { postsApiService } from "../../utils/api/post";
+import { CommentProps } from "../../models/Comment";
+import { PostProps } from "../../models/Post";
 import { calculateTimeAgo } from "../../utils/time";
 import CreateCommentFormPopup from "../Comment/CreateCommentFormPopup";
 import DeleteComment from "../Comment/DeleteComment";
@@ -13,85 +14,62 @@ import Dropdown from "../Common/Dropdown";
 import LikeCommentItem from "../Like/LikeCommentItem";
 import LikePostItem from "../Like/LikePostItem";
 import DeletePost from "../Post/DeletePost";
-import LoadingPlaceholder from "../Post/PlaceholderPost";
 import UpdatePost from "../Post/UpdatePost";
 
-interface SharedItemProps {
-  itemType: "post" | "comment";
-  userId: number;
-  postId: number;
-  commentId?: number;
-  content: string;
-  fullName: string;
-  username: string;
-  createdAt: Date;
-  updatedAt?: Date;
+type SharedItemProps = {
+  userId?: User["id"];
   onPostUpdate?: (editedContent: string) => void;
   onPostDelete?: () => void;
   onCommentDelete?: (commentId: number) => void;
   alreadyLink?: boolean;
-  onChildComponentsComplete?: () => void;
-}
+} & (
+  | {
+      itemType: "post";
+      post: PostProps;
+      comment?: never;
+    }
+  | {
+      itemType: "comment";
+      comment: CommentProps & { updatedAt?: undefined };
+      post?: never;
+    }
+);
 
 const SharedItem = ({
   itemType,
   userId,
-  postId,
-  commentId,
-  content,
-  fullName,
-  username,
-  createdAt,
-  updatedAt,
+  post,
+  comment,
   onPostUpdate,
   onPostDelete,
   onCommentDelete,
   alreadyLink = false,
-  onChildComponentsComplete,
 }: SharedItemProps) => {
-  const [childComponentsComplete, setChildComponentsComplete] = useState(false);
-  const [owner, setOwner] = useState<number | null>(null);
   const router = useRouter();
+  const [currentUserId, setCurrentUserId] = useState<number>(0);
 
   useEffect(() => {
-    const fetchOwner = async () => {
-      try {
-        const session = await getSession();
-        const currentUserId = session?.user.id;
-
-        if (itemType === "post") {
-          await postsApiService.getPost(userId, postId);
-        } else if (itemType === "comment" && commentId) {
-          await commentsApiService.getCommentByPostId(postId, commentId);
-        }
-
-        if (currentUserId === userId) {
-          setOwner(userId);
-        }
-      } catch (error) {
-        console.error(`Error fetching ${itemType} details:`, error);
-      } finally {
-        setChildComponentsComplete(true);
+    const fetchUserId = async () => {
+      const session = await getSession();
+      if (session?.user.id) {
+        setCurrentUserId(session.user.id);
       }
     };
 
-    fetchOwner();
-  }, [
-    itemType,
-    userId,
-    postId,
-    commentId,
-    updatedAt,
-    onChildComponentsComplete,
-  ]);
+    fetchUserId();
+  }, []);
 
-  const isLoading = !childComponentsComplete;
-  const isOwner = owner === userId;
-  const showDropdown = isOwner;
+  const showDropdown =
+    (itemType === "post" && currentUserId === post.author.id) ||
+    (itemType === "comment" && currentUserId === comment.user.id);
 
   const navigateToPostPage = () => {
-    router.push(`/${username}/${postId}`);
+    if (itemType === "post") {
+      router.push(`/${post.author.username}/${post.id}`);
+    }
   };
+
+  const author = itemType === "post" ? post.author : comment.user;
 
   const itemContentClass =
     itemType === "post"
@@ -105,91 +83,94 @@ const SharedItem = ({
       <div className="text-lg mb-1">
         <div className="flex items-center">
           <Link
-            href={`/${username}`}
+            href={`/${author.username}`}
             className="cursor-pointer"
             onClick={(e) => e.stopPropagation()}
           >
             <span className="font-bold text-base hover:underline">
-              {fullName}
+              {author.fullName}
             </span>{" "}
             <span className="text-gray-600 text-sm hover:underline">
-              @{username}
+              @{author.username}
             </span>
           </Link>
           <BsDot className="mx-1 text-gray-500" />
           <span className="text-xs text-gray-500">
-            {calculateTimeAgo(createdAt, updatedAt)}
+            {calculateTimeAgo(
+              new Date(
+                (post || comment).updatedAt || (post || comment).createdAt,
+              ),
+            )}
           </span>
         </div>
       </div>
-      <p className="text-sm mb-1 mt-2 break-words">{content}</p>
+      <p className="text-sm mb-1 mt-2 break-words">
+        {(post || comment).content}
+      </p>
     </div>
   );
 
   return (
     <div className="relative">
-      {isLoading && <LoadingPlaceholder />}
-      {!isLoading && (
-        <>
-          {alreadyLink && itemType === "post" ? (
-            ItemContent
-          ) : itemType === "comment" ? (
-            ItemContent
-          ) : (
-            <div onClick={navigateToPostPage}>{ItemContent}</div>
-          )}
-          {showDropdown && (
-            <div className="absolute top-0 right-0 mt-2 mr-2">
-              <Dropdown
-                trigger={
-                  <div className="cursor-pointer flex items-center justify-center text-gray-500 rounded-md text-xl w-7 h-7">
-                    <BsThreeDots />
-                  </div>
-                }
-              >
-                {itemType === "post" && (
-                  <UpdatePost
-                    userId={userId}
-                    postId={postId}
-                    content={content}
-                    onPostUpdate={onPostUpdate!}
-                  />
-                )}
-                {itemType === "post" && (
-                  <DeletePost
-                    userId={userId}
-                    postId={postId}
-                    onPostDelete={onPostDelete!}
-                  />
-                )}
-                {itemType === "comment" && commentId && (
-                  <DeleteComment
-                    userId={userId}
-                    postId={postId}
-                    commentId={commentId}
-                    onCommentDelete={() => onCommentDelete?.(commentId)}
-                  />
-                )}
-              </Dropdown>
-            </div>
-          )}
-          <div className="absolute bottom-0 right-0 p-1 flex">
-            {itemType === "post" && (
-              <LikePostItem userId={userId} postId={postId} />
-            )}
-            {itemType === "comment" && commentId && (
-              <LikeCommentItem
-                userId={userId}
-                postId={postId}
-                commentId={commentId}
-              />
-            )}
-            {itemType === "post" && (
-              <CreateCommentFormPopup userId={userId} postId={postId} />
-            )}
+      <>
+        {alreadyLink && itemType === "post" ? (
+          ItemContent
+        ) : itemType === "comment" ? (
+          ItemContent
+        ) : (
+          <div onClick={navigateToPostPage}>{ItemContent}</div>
+        )}
+        {showDropdown && (
+          <div className="absolute top-0 right-0 mt-2 mr-2">
+            <Dropdown
+              trigger={
+                <div className="cursor-pointer flex items-center justify-center text-gray-500 rounded-md text-xl w-7 h-7">
+                  <BsThreeDots />
+                </div>
+              }
+            >
+              {itemType === "post" && (
+                <UpdatePost
+                  userId={userId!}
+                  postId={post.id}
+                  content={post.content}
+                  onPostUpdate={onPostUpdate!}
+                />
+              )}
+              {itemType === "post" && (
+                <DeletePost
+                  userId={userId!}
+                  postId={post.id}
+                  onPostDelete={onPostDelete!}
+                />
+              )}
+              {itemType === "comment" && comment.id && (
+                <DeleteComment
+                  userId={userId!}
+                  postId={comment.postId}
+                  commentId={comment.id}
+                  onCommentDelete={() => onCommentDelete?.(comment.id)}
+                />
+              )}
+            </Dropdown>
           </div>
-        </>
-      )}
+        )}
+        <div className="absolute bottom-0 right-0 p-1 flex">
+          {userId && itemType === "post" && (
+            <LikePostItem userId={userId} postId={post.id} />
+          )}
+          {userId && itemType === "comment" && comment.id && (
+            <LikeCommentItem
+              userId={userId}
+              postId={comment.postId}
+              commentId={comment.id}
+            />
+          )}
+          {userId && itemType === "post" && (
+            <CreateCommentFormPopup userId={userId} postId={post.id} />
+          )}
+        </div>
+      </>
     </div>
   );
 };

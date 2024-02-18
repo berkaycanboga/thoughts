@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Post } from "../../models/Post";
+import { PostProps } from "../../models/Post";
 import { postsApiService } from "../../utils/api/post";
 import { PostValidation } from "../../utils/validation/postValidation";
 import useErrorHandling from "../Common/ErrorDisplay";
@@ -9,8 +9,8 @@ import PostFormTextarea from "./PostFormTextarea";
 
 interface CreatePostFormProps {
   userId: number;
-  onSuccess: (createdPost: Post) => void;
-  disabled: boolean;
+  onSuccess?: (createdPost: PostProps) => void;
+  disabled?: boolean;
 }
 
 const CreatePostForm = ({
@@ -21,7 +21,7 @@ const CreatePostForm = ({
   const { error, handleError, resetError } = useErrorHandling();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSuccess = (createdPost: Post) => {
+  const handleSuccess = (createdPost: PostProps) => {
     setIsLoading(false);
     if (onSuccess) {
       onSuccess(createdPost);

@@ -1,4 +1,4 @@
-import { Post } from "../../models/Post";
+import { PostProps } from "../../models/Post";
 
 import { api, urls } from "./api";
 
@@ -8,10 +8,10 @@ export const userApiService = {
   },
 
   getLikedPostsByUserId: async (userId: number) => {
-    return api.get<Post[]>(urls.userLikedPosts(userId));
+    return api.get<PostProps[]>(urls.userLikedPosts(userId));
   },
 
   getPostsByUserComments: async (userId: number) => {
-    return api.get<Post[]>(urls.userCommentsPosts(userId));
+    return api.get<PostProps[]>(urls.userCommentsPosts(userId));
   },
 };

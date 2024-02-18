@@ -3,7 +3,7 @@ import {
   createPost,
   getPostById,
   getUserPosts,
-  getUserFollowingPosts,
+  getFollowerPostsByUserId,
   updatePost,
   deletePost,
 } from "../services/PostService";
@@ -21,7 +21,17 @@ export const getUserPostsController = async (userId: number) => {
 };
 
 export const getUserFollowingPostsController = async (userId: number) => {
-  return getUserFollowingPosts(userId);
+  return getFollowerPostsByUserId(userId);
+};
+
+export const getFeed = async (userId: number) => {
+  const userPosts = await getUserPostsController(userId);
+  const userFollowingPosts = await getUserFollowingPostsController(userId);
+
+  const combinedPosts = [...userPosts, ...userFollowingPosts].sort(
+    (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+  );
+  return combinedPosts;
 };
 
 export const updatePostController = async (

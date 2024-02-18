@@ -1,42 +1,28 @@
+import { User } from "@prisma/client";
 import React from "react";
 
+import { PostProps } from "../../models/Post";
 import SharedItem from "../Shared/SharedItem";
 
-interface PostItemProps {
-  userId: number;
-  postId: number;
-  content: string;
-  fullName: string;
-  username: string;
-  createdAt: Date;
-  updatedAt: Date;
+interface PostItemProps extends PostProps {
+  userId?: User["id"];
   onPostUpdate: (editedContent: string) => void;
   onPostDelete: () => void;
   alreadyLink?: boolean;
 }
 
 const PostItem = ({
-  userId,
-  postId,
-  content,
-  fullName,
-  username,
-  createdAt,
-  updatedAt,
   onPostUpdate,
   onPostDelete,
   alreadyLink = false,
+  userId,
+  ...post
 }: PostItemProps) => {
   return (
     <SharedItem
-      itemType="post"
+      post={post}
       userId={userId}
-      postId={postId}
-      content={content}
-      fullName={fullName}
-      username={username}
-      createdAt={createdAt}
-      updatedAt={updatedAt}
+      itemType="post"
       onPostUpdate={onPostUpdate}
       onPostDelete={onPostDelete}
       alreadyLink={alreadyLink}

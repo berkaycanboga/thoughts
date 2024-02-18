@@ -1,39 +1,24 @@
 import React from "react";
 
+import { CommentProps } from "../../models/Comment";
 import SharedItem from "../Shared/SharedItem";
 
-interface CommentItemProps {
+interface CommentItemProps extends CommentProps {
   userId: number;
-  postId: number;
-  commentId: number;
-  content: string;
-  fullName: string;
-  username: string;
-  createdAt: Date;
   onCommentDelete: (commentId: number) => void;
 }
 
 const CommentItem = ({
   userId,
-  postId,
-  commentId,
-  content,
-  fullName,
-  username,
-  createdAt,
   onCommentDelete,
+  ...comment
 }: CommentItemProps) => {
   return (
     <SharedItem
       itemType="comment"
       userId={userId}
-      postId={postId}
-      commentId={commentId}
-      content={content}
-      fullName={fullName}
-      username={username}
-      createdAt={createdAt}
       onCommentDelete={onCommentDelete}
+      comment={{ ...comment, userId }}
     />
   );
 };

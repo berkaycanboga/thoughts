@@ -1,21 +1,19 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 
-import {
-  getUserPostsController,
-  getUserFollowingPostsController,
-} from "../../../../../controllers/PostController";
+import { getFeed } from "../../../../../controllers/PostController";
 import { authOptions } from "../../../auth/[...nextauth]/options";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
 
-  const userId = session?.user.id as number;
+  const userId = session?.user.id;
 
-  const userPosts = await getUserPostsController(userId);
-  const userFollowingPosts = await getUserFollowingPostsController(userId);
+  if (!userId) {
+    return NextResponse.json({ combinedPosts: [] });
+  }
 
-  const combinedPosts = [...userPosts, ...userFollowingPosts];
+  const feed = await getFeed(userId);
 
-  return NextResponse.json({ combinedPosts });
+  return NextResponse.json({ feed });
 }

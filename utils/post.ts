@@ -1,9 +1,9 @@
-import { Post as PostModel } from "../models/Post";
+import { PostProps } from "../models/Post";
 
 export const handleUpdatePost = (
   postId: number,
   updatedContent: string,
-  setPost: React.Dispatch<React.SetStateAction<PostModel | null>>,
+  setPost: React.Dispatch<React.SetStateAction<PostProps | null>>,
 ) => {
   setPost((prevPost) => ({
     ...prevPost!,
@@ -14,8 +14,8 @@ export const handleUpdatePost = (
 export const handleUpdatePostFeed = async (
   postId: number,
   editedContent: string,
-  posts: PostModel[],
-  setPosts: React.Dispatch<React.SetStateAction<PostModel[]>>,
+  posts: PostProps[],
+  setPosts: React.Dispatch<React.SetStateAction<PostProps[]>>,
 ) => {
   setPosts((prevPosts) =>
     prevPosts.map((post) =>
@@ -26,14 +26,14 @@ export const handleUpdatePostFeed = async (
 
 export const handleDeletePostFeed = async (
   postId: number,
-  posts: PostModel[],
-  setPosts: React.Dispatch<React.SetStateAction<PostModel[]>>,
+  posts: PostProps[],
+  setPosts: React.Dispatch<React.SetStateAction<PostProps[]>>,
 ) => {
   setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
 };
 
 export const handleDeletePost = (
-  setPost: React.Dispatch<React.SetStateAction<PostModel | null>>,
+  setPost: React.Dispatch<React.SetStateAction<PostProps | null>>,
 ) => {
   setPost(null);
   return true;

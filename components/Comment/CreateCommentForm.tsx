@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Comment } from "../../models/Comment";
+import { CommentProps } from "../../models/Comment";
 import { commentsApiService } from "../../utils/api/comment";
 import { PostValidation } from "../../utils/validation/postValidation";
 import useErrorHandling from "../Common/ErrorDisplay";
@@ -10,7 +10,7 @@ import CommentFormTextarea from "./CommentFormTextarea";
 interface CreateCommentFormProps {
   userId: number;
   postId: number;
-  onSuccess: (createdComment: Comment) => void;
+  onSuccess: (createdComment: CommentProps) => void;
 }
 
 const CreateCommentForm = ({
@@ -21,7 +21,7 @@ const CreateCommentForm = ({
   const { error, handleError, resetError } = useErrorHandling();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSuccess = (createdComment: Comment) => {
+  const handleSuccess = (createdComment: CommentProps) => {
     setIsLoading(false);
     if (onSuccess) {
       onSuccess(createdComment);

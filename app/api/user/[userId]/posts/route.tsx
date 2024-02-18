@@ -29,7 +29,7 @@ export async function POST(req: Request, ctx: { params: { userId: string } }) {
 
   userLastPostTime[userId] = currentTime;
 
-  return NextResponse.json({ newPost });
+  return NextResponse.json(newPost);
 }
 
 export async function GET(req: Request, ctx: { params: { userId: string } }) {

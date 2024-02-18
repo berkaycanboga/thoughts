@@ -2,103 +2,74 @@
 
 import React, { useState, useEffect } from "react";
 
-import { Post } from "../../models/Post";
+import { PostProps } from "../../models/Post";
 import { processNewPosts } from "../../utils/api/mainFeed";
 import { handleDeletePostFeed, handleUpdatePostFeed } from "../../utils/post";
 import PostContainer from "../Common/PostContainer";
 import CreatePostForm from "../Post/CreatePostForm";
-import LoadingPlaceholder from "../Post/PlaceholderPost";
 import PostItem from "../Post/PostItem";
 
 interface DashboardProps {
   userId: number;
   username: string;
   fullName: string;
-  posts: Post[];
+  posts?: PostProps[] | null;
 }
 
-const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
-  const [newPosts, setNewPosts] = useState<Post[]>([]);
+const Dashboard = ({ userId, posts: initialPosts = [] }: DashboardProps) => {
+  const [newPosts, setNewPosts] = useState<PostProps[]>([]);
+  const [feed, setFeed] = useState<PostProps[]>(() => initialPosts || []);
   const [showNewPosts, setShowNewPosts] = useState(false);
-  const [mainFeed, setMainFeed] = useState<Post[]>(initialPosts);
-  const [isManualPostCreationInProgress, setManualPostCreationInProgress] =
-    useState(false);
-  const [showPlaceholderPost, setShowPlaceholderPost] = useState(false);
-  const [isCreatingPost, setIsCreatingPost] = useState(false);
 
-  const handleCreatePost = async (createdPost: Post) => {
-    setShowPlaceholderPost(true);
-    setManualPostCreationInProgress(true);
-    setIsCreatingPost(true);
-
-    if (createdPost.author?.id === userId) {
-      setMainFeed((prevMainFeed) => [createdPost, ...prevMainFeed]);
-    } else {
-      setNewPosts((prevPosts) => [createdPost, ...prevPosts]);
-      if (newPosts.length === 0) {
-        setShowNewPosts(true);
-      }
-    }
-
-    setTimeout(async () => {
-      setManualPostCreationInProgress(false);
-
-      await processNewPosts(
-        userId,
-        () => mainFeed,
-        setNewPosts,
-        setShowNewPosts,
-        setMainFeed,
-      );
-      setIsCreatingPost(false);
-      setShowPlaceholderPost(false);
-    }, 1500);
+  const handleCreatePost = (newPost: PostProps) => {
+    setFeed((prevFeed) => [newPost, ...prevFeed]);
   };
 
   const handleUpdatePost = async (postId: number, editedContent: string) => {
-    handleUpdatePostFeed(postId, editedContent, mainFeed, setMainFeed);
+    handleUpdatePostFeed(postId, editedContent, feed, setFeed);
   };
 
   const handleDeletePost = async (postId: number) => {
-    handleDeletePostFeed(postId, mainFeed, setMainFeed);
+    handleDeletePostFeed(postId, feed, setFeed);
   };
 
   const handleShowNewPosts = () => {
-    setMainFeed((prevMainFeed) => [...newPosts, ...prevMainFeed]);
-    setShowNewPosts(true);
+    setFeed((prevFeed) => [
+      ...newPosts.filter(
+        (post) => !prevFeed.some((prevPost) => post.id === prevPost.id),
+      ),
+      ...prevFeed,
+    ]);
     setNewPosts([]);
+    setShowNewPosts(false);
   };
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (!isManualPostCreationInProgress) {
-        processNewPosts(
-          userId,
-          () => mainFeed,
-          setNewPosts,
-          setShowNewPosts,
-          setMainFeed,
-        );
+    const intervalId = setInterval(async () => {
+      try {
+        const { newPosts } = await processNewPosts(userId);
+
+        if (newPosts && newPosts.length > 0) {
+          const filteredNewPosts = newPosts.filter(
+            (post) =>
+              post.author.id !== userId &&
+              !feed.some((prevPost) => post.id === prevPost.id),
+          );
+
+          setNewPosts(filteredNewPosts);
+        }
+      } catch (e) {
+        console.error(e);
       }
-    }, 15000);
+    }, 15_000);
 
     return () => clearInterval(intervalId);
-  }, [mainFeed, userId, isManualPostCreationInProgress]);
-
-  const sortedMainFeed = mainFeed.slice().sort((a, b) => {
-    const dateA = new Date(a.createdAt as Date);
-    const dateB = new Date(b.createdAt as Date);
-    return dateB.getTime() - dateA.getTime();
-  });
+  }, [feed, userId]);
 
   return (
     <PostContainer>
       <div className="pb-4 border-b border-gray-200 mb-4">
-        <CreatePostForm
-          userId={userId}
-          onSuccess={handleCreatePost}
-          disabled={isCreatingPost}
-        />
+        <CreatePostForm userId={userId} onSuccess={handleCreatePost} />
       </div>
 
       {newPosts.length > 0 && !showNewPosts && (
@@ -112,23 +83,16 @@ const Dashboard = ({ userId, posts: initialPosts }: DashboardProps) => {
         </div>
       )}
 
-      {showPlaceholderPost && <LoadingPlaceholder />}
-      {[...sortedMainFeed].map((post) => (
-        <React.Fragment key={post.id}>
-          <PostItem
-            userId={post.author?.id as number}
-            postId={post.id as number}
-            content={post.content}
-            username={post.author?.username as string}
-            fullName={post.author?.fullName as string}
-            createdAt={post.createdAt as Date}
-            updatedAt={post.updatedAt as Date}
-            onPostUpdate={(updatedContent) =>
-              handleUpdatePost(post.id as number, updatedContent)
-            }
-            onPostDelete={() => handleDeletePost(post.id as number)}
-          />
-        </React.Fragment>
+      {feed.map((post) => (
+        <PostItem
+          {...post}
+          key={post.id}
+          userId={userId}
+          onPostUpdate={(updatedContent) =>
+            handleUpdatePost(post.id as number, updatedContent)
+          }
+          onPostDelete={() => handleDeletePost(post.id as number)}
+        />
       ))}
     </PostContainer>
   );

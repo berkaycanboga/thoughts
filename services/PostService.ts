@@ -9,6 +9,7 @@ export const createPost = async (postData: PostCRUD) => {
       ...rest,
       author: { connect: { id: authorId } },
     },
+    include: { author: true },
   });
 
   return post;
@@ -26,21 +27,31 @@ export const getPostById = async (postId: number) => {
 export const getUserPosts = async (userId: number) => {
   const userPosts = await prisma.post.findMany({
     where: { authorId: userId },
-    include: { author: true, comment: true },
+    include: { author: true, comment: { include: { user: true } } },
+    orderBy: { updatedAt: "desc" },
+    take: 5,
   });
 
   return userPosts;
 };
 
-export const getUserFollowingPosts = async (userId: number) => {
-  const userFollowing = await prisma.user.findUnique({
-    where: { id: userId },
-    include: {
-      following: { include: { post: { include: { author: true } } } },
+export const getFollowerPostsByUserId = async (userId: number) => {
+  const userFollowing = await prisma.post.findMany({
+    where: {
+      author: {
+        followers: {
+          some: {
+            id: userId,
+          },
+        },
+      },
     },
+    include: { author: true, comment: { include: { user: true } } },
+    orderBy: { updatedAt: "desc" },
+    take: 5,
   });
 
-  return userFollowing?.following?.map((user) => user.post).flat() || [];
+  return userFollowing;
 };
 
 export const updatePost = async (

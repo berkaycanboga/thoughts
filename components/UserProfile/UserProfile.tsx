@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import { Post } from "../../models/Post";
+import { PostProps } from "../../models/Post";
 import { postsApiService } from "../../utils/api/post";
 import { userApiService } from "../../utils/api/user";
 import { handleDeletePostFeed, handleUpdatePostFeed } from "../../utils/post";
@@ -16,7 +16,7 @@ interface UserProfileProps {
 }
 
 const UserProfile = ({ userId }: UserProfileProps) => {
-  const [userPosts, setUserPosts] = useState<Post[]>([]);
+  const [userPosts, setUserPosts] = useState<PostProps[]>([]);
   const [activeButton, setActiveButton] = useState<string>("posts");
   const [counts, setCounts] = useState<{ [key: string]: number }>({
     posts: 0,
@@ -27,7 +27,7 @@ const UserProfile = ({ userId }: UserProfileProps) => {
   useEffect(() => {
     const fetchUserPosts = async () => {
       try {
-        let fetchedPosts: Post[];
+        let fetchedPosts: PostProps[];
 
         switch (activeButton) {
           case "replies":
@@ -119,21 +119,15 @@ const UserProfile = ({ userId }: UserProfileProps) => {
           </button>
         </div>
         {[...sortedUserPosts].map((post) => (
-          <React.Fragment key={post.id}>
-            <PostItem
-              userId={post.author?.id as number}
-              postId={post.id as number}
-              content={post.content}
-              username={post.author?.username as string}
-              fullName={post.author?.fullName as string}
-              createdAt={post.createdAt}
-              updatedAt={post.updatedAt}
-              onPostUpdate={(updatedContent) =>
-                handleUpdatePost(post.id as number, updatedContent)
-              }
-              onPostDelete={() => handleDeletePost(post.id as number)}
-            />
-          </React.Fragment>
+          <PostItem
+            {...post}
+            key={post.id}
+            userId={userId}
+            onPostUpdate={(updatedContent) =>
+              handleUpdatePost(post.id as number, updatedContent)
+            }
+            onPostDelete={() => handleDeletePost(post.id as number)}
+          />
         ))}
       </PostContainer>
     </>

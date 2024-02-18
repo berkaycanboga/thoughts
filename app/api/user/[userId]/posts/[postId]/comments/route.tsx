@@ -5,6 +5,7 @@ import {
   createCommentController,
   getCommentsByPostIdController,
 } from "../../../../../../../controllers/CommentController";
+import { CommentProps } from "../../../../../../../models/Comment";
 import { authOptions } from "../../../../../auth/[...nextauth]/options";
 
 export async function POST(req: Request, ctx: { params: { postId: string } }) {
@@ -18,7 +19,7 @@ export async function POST(req: Request, ctx: { params: { postId: string } }) {
     content,
     userId,
     postId,
-  });
+  } as CommentProps);
 
   return NextResponse.json({ ...newComment });
 }

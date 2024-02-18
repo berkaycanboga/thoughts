@@ -1,10 +1,10 @@
-import { Comment } from "../models/Comment";
-import { Post as PostModel } from "../models/Post";
+import { CommentProps } from "../models/Comment";
+import { PostProps } from "../models/Post";
 
 export const handleCommentCreateUtil = (
-  postState: PostModel | null,
-  newComment: Comment,
-  setPost: React.Dispatch<React.SetStateAction<PostModel | null>>,
+  postState: PostProps | null,
+  newComment: CommentProps,
+  setPost: React.Dispatch<React.SetStateAction<PostProps | null>>,
 ) => {
   if (postState) {
     const newCommentWithDates = {
@@ -19,9 +19,9 @@ export const handleCommentCreateUtil = (
 };
 
 export const handleCommentDeleteUtil = (
-  postState: PostModel | null,
+  postState: PostProps | null,
   commentId: number,
-  setPost: React.Dispatch<React.SetStateAction<PostModel | null>>,
+  setPost: React.Dispatch<React.SetStateAction<PostProps | null>>,
 ) => {
   if (postState) {
     setPost((prevPost) => ({

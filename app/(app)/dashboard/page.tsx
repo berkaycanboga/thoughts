@@ -2,10 +2,7 @@ import { getServerSession } from "next-auth";
 import React from "react";
 
 import Dashboard from "../../../components/Dashboard/Dashboard";
-import {
-  getUserPostsController,
-  getUserFollowingPostsController,
-} from "../../../controllers/PostController";
+import { getFeed } from "../../../controllers/PostController";
 import { authOptions } from "../../api/auth/[...nextauth]/options";
 
 const DashboardPage = async () => {
@@ -14,15 +11,12 @@ const DashboardPage = async () => {
   const username = session?.user.username as string;
   const fullName = session?.user.username as string;
 
-  const userPosts = await getUserPostsController(userId);
-  const userFollowingPosts = await getUserFollowingPostsController(userId);
-
-  const posts = [...userPosts, ...userFollowingPosts];
+  const feed = await getFeed(userId);
 
   return (
     <Dashboard
       userId={userId}
-      posts={posts}
+      posts={feed}
       username={username}
       fullName={fullName}
     />

@@ -1,4 +1,4 @@
-import { Comment } from "../models/Comment";
+import { CommentProps } from "../models/Comment";
 import {
   createComment,
   getCommentsByPostId,
@@ -6,7 +6,7 @@ import {
   getCommentByPostId,
 } from "../services/CommentService";
 
-export const createCommentController = async (commentData: Comment) => {
+export const createCommentController = async (commentData: CommentProps) => {
   return createComment(commentData);
 };
 export const getCommentByIdController = async (

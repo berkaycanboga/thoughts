@@ -1,49 +1,22 @@
-import { Post } from "../../models/Post";
+import { PostProps } from "../../models/Post";
 
 import { api, urls } from "./api";
 
-export const processNewPosts = async (
-  userId: number,
-  getMainFeed: () => Post[],
-  setNewPosts: React.Dispatch<React.SetStateAction<Post[]>>,
-  setShowNewPosts: React.Dispatch<React.SetStateAction<boolean>>,
-  setMainFeed: React.Dispatch<React.SetStateAction<Post[]>>,
-) => {
-  const response = await api.get<{ combinedPosts: Post[] }>(
-    urls.user(userId) + "/dashboard",
-  );
-  const data = response.combinedPosts;
+export const processNewPosts = async (userId: number) => {
+  try {
+    const { feed } = await api.get<{
+      feed: PostProps[];
+    }>(urls.user(userId) + "/dashboard");
 
-  if (Array.isArray(data)) {
-    const newPostsData = data.filter(
-      (newPost: Post) =>
-        !getMainFeed().some((existingPost) => existingPost.id === newPost.id),
-    );
-
-    if (newPostsData.length > 0) {
-      const newPostsWithDates = newPostsData.map((post: Post) => ({
-        ...post,
-        createdAt: new Date(post.createdAt as Date),
-        updatedAt: new Date(post.updatedAt as Date),
-      }));
-
-      const newPostsByCurrentUser = newPostsWithDates.filter(
-        (post: Post) => post.author?.id === userId,
-      );
-
-      setMainFeed((prevMainFeed) => [
-        ...newPostsByCurrentUser,
-        ...prevMainFeed,
-      ]);
-
-      const remainingNewPosts = newPostsWithDates.filter(
-        (post: Post) => post.author?.id !== userId,
-      );
-
-      setNewPosts(remainingNewPosts);
-      setShowNewPosts(false);
+    if (!feed || !Array.isArray(feed)) {
+      console.error(`Invalid response format from ${urls.user(userId)}`, feed);
+      throw new Error(`Invalid response format from ${urls.user(userId)}`);
     }
-  } else {
-    console.error(`Invalid response format from ${urls.user(userId)}:`, data);
+
+    return {
+      newPosts: feed,
+    };
+  } catch (e) {
+    return { newPosts: null };
   }
 };

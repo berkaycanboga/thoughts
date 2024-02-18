@@ -1,15 +1,8 @@
-import { Like } from "./Like";
-import { User } from "./User";
+import { Prisma } from "@prisma/client";
 
-export interface Comment {
-  id?: number;
-  content: string;
-  createdAt?: Date;
-  user?: User;
-  like?: Like[];
-  userId: number;
-  postId: number;
-}
+export type CommentProps = Prisma.CommentGetPayload<{
+  include: { user?: true };
+}>;
 
 export interface CommentCRUD {
   content: string;
