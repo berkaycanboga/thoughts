@@ -54,16 +54,13 @@ const UpdatePost = ({
       if (onPostUpdate) {
         onPostUpdate(updatedContent);
       }
+      setFormKey((prevKey) => prevKey + 1);
     } catch (err) {
       handleError(err, "Error updating the post");
       setIsUpdateLoading(false);
     } finally {
       setIsUpdateLoading(false);
     }
-  };
-
-  const handleContentChange = (newContent: string) => {
-    setDraftContent(newContent);
   };
 
   const handlePopupClose = () => {
@@ -97,7 +94,7 @@ const UpdatePost = ({
                 initialValues={{ postContent: content }}
                 onSubmit={handlePostUpdate}
                 isLoading={isUpdateLoading}
-                onContentChange={handleContentChange}
+                onChange={(e) => setDraftContent(e.target.value)}
               />
             </div>
             <div className="text-sm text-gray-500 flex my-2 items-center">

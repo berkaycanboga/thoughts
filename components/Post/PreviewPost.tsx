@@ -16,9 +16,8 @@ const PreviewPost = ({
   fullName,
   username,
   createdAt,
-  updatedAt,
 }: PreviewPostProps) => {
-  const timeAgo = calculateTimeAgo(createdAt, updatedAt);
+  const timeAgo = calculateTimeAgo(createdAt);
 
   return (
     <div className="relative mt-2">

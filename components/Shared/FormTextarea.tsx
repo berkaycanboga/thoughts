@@ -13,6 +13,7 @@ interface FormTextareaProps {
   isLoading: boolean;
   buttonText: string;
   disabled?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 const FormTextarea = ({
@@ -21,6 +22,7 @@ const FormTextarea = ({
   isLoading,
   buttonText,
   disabled,
+  onChange,
 }: FormTextareaProps) => {
   const formik = useFormik({
     initialValues,
@@ -74,6 +76,11 @@ const FormTextarea = ({
           onChange={(e) => {
             const newContent = e.target.value;
             formik.handleChange(e);
+
+            if (onChange) {
+              onChange(e);
+            }
+
             if (newContent.length <= 379) {
               e.target.style.height = "auto";
               e.target.style.height = e.target.scrollHeight + 2 + "px";
