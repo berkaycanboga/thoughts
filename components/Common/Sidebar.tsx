@@ -50,30 +50,9 @@ const Sidebar = () => {
   const pathname = usePathname();
   const windowWidth = useWindowWidth();
   const isIconFilled = useIsIconFilled(pathname);
-  const [username, setUsername] = useState<string | undefined>();
-
-  useEffect(() => {
-    const fetchSession = async () => {
-      const session = await getSession();
-      if (session) {
-        const username = session.user.username;
-        setUsername(username);
-      }
-    };
-
-    fetchSession();
-  }, []);
 
   const toggleSearch = () => setIsSearchOpen(!isSearchOpen);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-  const shouldRenderSidebar = !(
-    pathname.startsWith("/dashboard") || pathname.startsWith(`/${username}`)
-  );
-
-  if (shouldRenderSidebar) {
-    return null;
-  }
 
   const renderLink = ({ path, icon: Icon, label }: LinkProps): JSX.Element => (
     <Link
@@ -97,7 +76,7 @@ const Sidebar = () => {
   const showIconsAtBottom = windowWidth <= 800;
 
   return (
-    <div className="flex relative flex-col">
+    <div className="flex relative flex-col z-50">
       {!showIconsAtBottom && (
         <SidebarContent
           showIconsOnly={showIconsOnly}

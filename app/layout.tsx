@@ -1,4 +1,3 @@
-import Sidebar from "../components/Common/Sidebar";
 import "../styles/globals.css";
 
 export const metadata = {
@@ -16,10 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gray-100">
-        {children}
-        <Sidebar />
-      </body>
+      <body className="bg-gray-100">{children}</body>
     </html>
   );
 }
