@@ -26,11 +26,11 @@ export default function HomePage() {
   }, [router]);
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       {loading ? null : (
-        <div>
+        <>
           {session ? (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="flex-1 flex items-center justify-center">
               <div className="max-w-md mx-auto p-8 bg-white text-gray-800 rounded-lg shadow-md">
                 <p>
                   You&apos;re already signed in. Redirecting to dashboard...
@@ -38,10 +38,10 @@ export default function HomePage() {
               </div>
             </div>
           ) : (
-            <div className="min-h-screen flex bg-gradient-to-r from-gray-300 via-gray-200 to-gray-100">
-              <div className="w-1/2 flex items-center justify-center p-8 bg-white">
+            <div className="flex-1 flex flex-col bg-gradient-to-r from-gray-300 via-gray-200 to-gray-100">
+              <div className="flex-1 flex items-center justify-center p-8 bg-white">
                 <div className="text-center">
-                  <h2 className="text-6xl font-extrabold text-cyan-800 mb-4">
+                  <h2 className="text-3xl sm:text-6xl font-extrabold text-cyan-800 mb-4">
                     Welcome to{" "}
                     <Image
                       src="/logo.svg"
@@ -59,9 +59,9 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="w-1/2 flex items-center justify-center p-8 bg-gradient-to-r from-cyan-700 to-cyan-500">
+              <div className="flex-1 flex items-center justify-center p-8 bg-gradient-to-r from-cyan-700 to-cyan-500">
                 <div className="max-w-md text-center text-white">
-                  <h3 className="text-4xl font-extrabold mb-4">
+                  <h3 className="text-2xl sm:text-4xl font-extrabold mb-4">
                     Join the Conversation!
                   </h3>
                   <p className="text-lg mb-6">
@@ -71,7 +71,7 @@ export default function HomePage() {
                   <div className="flex justify-center space-x-4">
                     <Link
                       href="/signup"
-                      className="bg-white text-cyan-700 px-10 py-4 rounded-full hover:bg-gray-200 hover:text-cyan-700 transition duration-300"
+                      className="bg-white text-cyan-700 px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-gray-200 hover:text-cyan-700 transition duration-300"
                     >
                       Sign Up
                     </Link>
@@ -86,8 +86,8 @@ export default function HomePage() {
               </div>
             </div>
           )}
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 }
