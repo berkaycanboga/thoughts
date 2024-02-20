@@ -48,6 +48,14 @@ examples, ensure to adjust the Next.js configuration accordingly. The default
 values in the configuration assume alignment with the examples. Any deviations
 may require manual adjustments.
 
+### Fixing API Route Conflicts on Vercel
+
+If you're encountering issues with the `baseurl/[username]/[postId]` route and
+unexpected conflicts in the API path `/[username]/api/...` and didn't change or
+apply different API or any structure that may affect API, you need to keep
+current `vercel.json` file rewrite rule. This will change API route to `/api/`
+properly.
+
 ### Getting Started
 
 1. Copy the example files:
