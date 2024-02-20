@@ -4,7 +4,6 @@ const isLocalhost = process.env.NODE_ENV === "development";
 
 const localhostBaseUrl = process.env.LOCAL_HOST_BASE_API_URL;
 const vercelBaseUrl = process.env.VERCEL_BASE_API_URL;
-console.log(localhostBaseUrl, vercelBaseUrl);
 
 const BASE_URL = isLocalhost ? localhostBaseUrl : vercelBaseUrl;
 

@@ -42,7 +42,6 @@ const Post = ({ post }: PostPageProps) => {
   }, []);
 
   const handleUpdate = (updatedContent: string) => {
-    console.log("Updating post content:", updatedContent);
     handleUpdatePost(post.id as number, updatedContent, setPost);
   };
   const handleDelete = () => {
