@@ -77,4 +77,70 @@ describe("postsApiService", () => {
     expect(mockApi.delete).toHaveBeenCalledWith(urls.userPosts(userId, postId));
     expect(result).toEqual(mockPostProps);
   });
+
+  // Edge cases
+  it("should handle API error when creating a post", async () => {
+    const errorMessage = "Failed to create post";
+    mockApi.post.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(postsApiService.createPost(userId, content)).rejects.toThrow(
+      errorMessage,
+    );
+  });
+
+  it("should handle empty response when getting user posts", async () => {
+    mockApi.get.mockResolvedValueOnce(null);
+
+    const result = await postsApiService.getUserPosts(userId);
+
+    expect(result).toEqual(null);
+  });
+
+  it("should handle non-numeric post ID when getting a post", async () => {
+    const nonNumericPostId = "abc";
+    const error = new Error("Invalid post ID");
+
+    mockApi.get.mockRejectedValueOnce(error);
+
+    await expect(
+      postsApiService.getPost(
+        userId,
+        // @ts-expect-error: This is an intentional edge case where a string is passed instead of a number.
+        nonNumericPostId,
+      ),
+    ).rejects.toThrow("Invalid post ID");
+  });
+
+  it("should handle API error when updating a post", async () => {
+    const errorMessage = "Failed to update post";
+    mockApi.put.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      postsApiService.updatePost(userId, postId, content),
+    ).rejects.toThrow(errorMessage);
+  });
+
+  it("should handle API error when deleting a post", async () => {
+    const errorMessage = "Failed to delete post";
+    mockApi.delete.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(postsApiService.deletePost(userId, postId)).rejects.toThrow(
+      errorMessage,
+    );
+  });
+
+  it("should handle non-numeric post ID when deleting a post", async () => {
+    const nonNumericPostId = "xyz";
+    const error = new Error("Invalid post ID");
+
+    mockApi.delete.mockRejectedValueOnce(error);
+
+    await expect(
+      postsApiService.deletePost(
+        userId,
+        // @ts-expect-error: This is an intentional edge case where a string is passed instead of a number.
+        nonNumericPostId,
+      ),
+    ).rejects.toThrow("Invalid post ID");
+  });
 });
