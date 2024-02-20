@@ -40,7 +40,7 @@ describe("followApiService", () => {
     const result = await followApiService.followUser(userId);
 
     expect(mockApi.post).toHaveBeenCalledWith(urls.follow(followingId));
-    expect(result).toEqual({ message: "User Followed" });
+    expect(result).toEqual(mockFollow);
   });
 
   it("should unfollow a user successfully", async () => {
@@ -51,6 +51,42 @@ describe("followApiService", () => {
     const result = await followApiService.unfollowUser(userId);
 
     expect(mockApi.delete).toHaveBeenCalledWith(urls.follow(followingId));
-    expect(result).toEqual({ message: "User Unfollowed" });
+    expect(result).toEqual(mockUnFollow);
+  });
+
+  // Edge cases
+  it("should handle API error when getting followers by user ID", async () => {
+    const errorMessage = "Failed to get followers";
+    mockApi.get.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      followApiService.getFollowersByUserId(followingId),
+    ).rejects.toThrow(errorMessage);
+  });
+
+  it("should handle empty response when getting following by user ID", async () => {
+    mockApi.get.mockResolvedValueOnce(null);
+
+    const result = await followApiService.getFollowingByUserId(userId);
+
+    expect(result).toEqual(null);
+  });
+
+  it("should handle API error when following a user", async () => {
+    const errorMessage = "Failed to follow user";
+    mockApi.post.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(followApiService.followUser(userId)).rejects.toThrow(
+      errorMessage,
+    );
+  });
+
+  it("should handle API error when unfollowing a user", async () => {
+    const errorMessage = "Failed to unfollow user";
+    mockApi.delete.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(followApiService.unfollowUser(userId)).rejects.toThrow(
+      errorMessage,
+    );
   });
 });
