@@ -89,4 +89,62 @@ describe("commentsApiService", () => {
     );
     expect(result).toEqual(mockComment);
   });
+
+  // Edge cases
+  it("should handle API error when creating a comment", async () => {
+    const errorMessage = "Failed to create comment";
+    mockApi.post.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      commentsApiService.createComment(userId, postId, content),
+    ).rejects.toThrow(errorMessage);
+  });
+
+  it("should handle empty response when getting comments by post Id", async () => {
+    mockApi.get.mockResolvedValueOnce(null);
+
+    const result = await commentsApiService.getCommentsByPostId(userId, postId);
+
+    expect(result).toEqual(null);
+  });
+
+  it("should handle non-numeric comment ID when getting a single comment by post Id", async () => {
+    const nonNumericCommentId = "abc";
+    const error = new Error("Invalid comment ID");
+
+    mockApi.get.mockRejectedValueOnce(error);
+
+    await expect(
+      commentsApiService.getCommentByPostId(
+        // @ts-expect-error: This is an intentional edge case where a string is passed instead of a number.
+        nonNumericCommentId,
+        postId,
+      ),
+    ).rejects.toThrow("Invalid comment ID");
+  });
+
+  it("should handle API error when deleting a comment", async () => {
+    const errorMessage = "Failed to delete comment";
+    mockApi.delete.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      commentsApiService.deleteComment(userId, postId, commentId),
+    ).rejects.toThrow(errorMessage);
+  });
+
+  it("should handle non-numeric comment ID when deleting a comment", async () => {
+    const nonNumericCommentId = "xyz";
+    const error = new Error("Invalid comment ID");
+
+    mockApi.delete.mockRejectedValueOnce(error);
+
+    await expect(
+      commentsApiService.deleteComment(
+        userId,
+        postId,
+        // @ts-expect-error: This is an intentional edge case where a string is passed instead of a number.
+        nonNumericCommentId,
+      ),
+    ).rejects.toThrow("Invalid comment ID");
+  });
 });
