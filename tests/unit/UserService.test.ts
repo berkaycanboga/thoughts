@@ -48,7 +48,7 @@ describe("userApiService", () => {
     expect(result).toEqual(userCommentedPosts);
   });
 
-  // Edge Cases
+  // Edge cases
 
   it("should handle API error when getting user details", async () => {
     const errorMessage = "Failed to get user details";
