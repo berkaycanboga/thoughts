@@ -4,13 +4,23 @@ import { decodeToken } from "./utils/decode";
 
 export async function middleware(req: NextRequest) {
   const decodedToken = await decodeToken(req);
+  const requestedUrl = new URL(req.url);
+
+  if (
+    requestedUrl.pathname.startsWith("/signin") ||
+    requestedUrl.pathname.startsWith("/signup") ||
+    requestedUrl.pathname.startsWith("/api/auth/") ||
+    requestedUrl.pathname.startsWith("/logo") ||
+    requestedUrl.pathname === "/"
+  ) {
+    return NextResponse.next();
+  }
 
   if (!decodedToken) {
-    return NextResponse.redirect(new URL("/signin", req.url));
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
   const currentUser = decodedToken!.id;
-  const requestedUrl = new URL(req.url);
 
   const userId = requestedUrl.pathname.split("/")[3];
 
@@ -45,5 +55,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/user/:path*", "/dashboard/:path*"],
+  matcher: ["/api/user/:path*", "/dashboard/:path*", "/:username/"],
 };

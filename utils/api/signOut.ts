@@ -2,7 +2,7 @@ import { signOut } from "next-auth/react";
 
 export const signOutApi = async () => {
   try {
-    await signOut({ callbackUrl: "/signin" });
+    await signOut({ callbackUrl: "/" });
     return { success: true };
   } catch (error) {
     console.error("Error during sign-out:", error);
